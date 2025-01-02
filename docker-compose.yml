@@ -1,7 +1,23 @@
 version: "3"
 
 services:
+  fastapi:
+    build:
+      context: .
+    container_name: fastapi
+    restart: always
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+      - weaviate 
+
   weaviate:
+    container_name: weaviate
     command:
       - --host
       - 0.0.0.0

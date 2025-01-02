@@ -21,7 +21,11 @@ class WeviateDatabaseInistance(RAGInterface):
     
     def connect(self) -> None:        
         load_dotenv()        
-        client = weaviate.connect_to_local(headers={
+        client = weaviate.connect_to_local(
+        host="weaviate",
+        port=8080,
+        grpc_port=50051,
+        headers={
             "X-OpenAI-Api-Key": os.environ["OPENAI_API_KEY"]
         })
         if client is None:

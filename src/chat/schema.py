@@ -20,6 +20,7 @@ class NewConversationModel(BaseModel):
     updated_at: datetime
     subject: str
     reply: ReplyModel
+    is_new: bool
 
 
 class MessageModel(BaseModel):
@@ -27,3 +28,4 @@ class MessageModel(BaseModel):
     conversation_id: str
     content: str
     timestamp: datetime
+    is_new: bool

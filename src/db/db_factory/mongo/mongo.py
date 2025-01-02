@@ -75,7 +75,7 @@ class MongoDB(DBInterface):
         for chat in chats:
             chat_list.append(MessageModel(id=str(chat["_id"]), 
                                           content=chat["message"], 
-                                          role=chat["role"], 
+                                          role=chat["role"],                                           
                                           timestamp=chat["created_at"]))
         total_pages, total_entries = self._get_total_page(conversation_id=conversation_id, page_size=limit)
         return MessagesResponseModel(messages=chat_list, 
