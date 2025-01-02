@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from src.rag.schemas import SimpleRagEntryRequest, SimpleRagEntryResponse
 from src.rag.rag_factory.weviate.weviate import WeviateDatabaseInistance
+from src.rag.rag_factory.weviate.seed.dbOps.run import run_seed
 
 router = APIRouter()
 
@@ -76,4 +77,12 @@ async def query(collection_name: str, query: str, db: WeviateDatabaseInistance =
     return {
         "message": f"Successfully Fetched {len(entries)} Entries from RAG",
         "entries": entries
+    }
+    
+@router.get("/seed")
+async def seed(db: WeviateDatabaseInistance = Depends(get_db_insance)):        
+    await run_seed()
+        
+    return {
+        "message": "Successfully Seeded RAG"
     }
