@@ -1,0 +1,786 @@
+document,document_type,tag
+"**1: Introduction to the Asset Module**  
+The Asset Module provides a comprehensive suite of tools to manage organizational assets efficiently. It includes the following functionalities:  
+1. **Asset Category**: Create and categorize assets for better organization and tracking.  
+2. **Asset Management**: Maintain details of each asset, including availability and assignment.  
+3. **Asset Distribution**: Track which employees are assigned specific assets and the time frames for usage.  
+4. **Asset Reports**: Generate reports on asset assignments and statuses for auditing and tracking purposes.  
+5. **Asset Requisition Requests**: Allow employees to request assets and enable administrators to approve or reject these requests.",user_manual,Asset
+"**2: Asset Category**  
+- **Menu Navigation**: `Employee → Asset → Asset Category`  
+- **Purpose**:  
+  - Enables administrators to create, organize, and monitor categories for organizational assets.  
+  - For example, categories like ""Laptops,"" ""Desks,"" ""Office Chairs,"" or ""Monitors"" can be defined for better asset management.  
+- **Features**:  
+  - Add new categories by specifying relevant details.  
+  - Monitor and modify existing categories as needed.  
+- **Use Case**: If an organization purchases new types of assets (e.g., smartphones), admins can create a new category to group these assets efficiently.  
+- **Interface Details**:  
+  - The interface shows existing categories and an option to add new ones, typically with fields like ""Category Name"" and ""Description.""",user_manual,Asset
+"**3: Asset Management**  
+- **Menu Navigation**: `Employee → Asset → Asset`  
+- **Purpose**:  
+  - Provides a centralized system to manage detailed information about each asset.  
+  - Ensures admins can track the lifecycle of each asset, its usage, and availability.  
+- **Features**:  
+  1. **View Asset Details**: Check which assets are assigned to employees or are available.  
+  2. **Add New Asset**:  
+     - Input fields include:  
+       - **Category**: Select the predefined category.  
+       - **Model Number**: Enter the asset model.  
+       - **Manufacturer**: Specify the manufacturer.  
+       - **Purchase Date**: Record when the asset was acquired.  
+  3. **Edit/Update Assets**: Modify existing asset details, attach documents, and view historical data for tracking.  
+- **Use Case**:  
+  - For example, if an employee requests a laptop, the admin can check this module to assign an available laptop and update its status.  
+- **Visual References**: The interface may display a table of assets with filters for searching by category, status, or employee.",user_manual,Asset
+"**4: Distribute Asset**  
+- **Menu Navigation**: `Employee → Asset → Distribute Asset`  
+- **Purpose**:  
+  - Allows the organization to track the distribution of assets among employees.  
+- **Features**:  
+  - View which employee has been assigned a specific asset, along with dates of commencement and return.  
+  - Update asset distribution records (e.g., extend end dates or reassign assets).  
+- **Use Case**:  
+  - If an employee's asset assignment period ends, the admin can update the status or reallocate it to another employee.  
+- **Actions**:  
+  - Admins can modify the application for asset distribution via an ""Edit"" button.  
+- **Visual References**: Interfaces typically display assignment details like:  
+  - Employee Name  
+  - Assigned Asset  
+  - Start Date  
+  - End Date  ",user_manual,Asset
+"**5: Asset Reports**  
+- **Menu Navigation**: `Employee → Asset → Asset Report`  
+- **Purpose**:  
+  - Generate detailed reports about asset assignments, usage, and availability.  
+  - These reports can assist in audits, compliance, and organizational planning.  
+- **Features**:  
+  - Filter assets by date range, employee, or asset category.  
+  - Downloadable or printable reports for documentation purposes.  
+- **Use Case**:  
+  - Admins can generate a report showing all laptops assigned to employees during a specific month to ensure accurate inventory tracking.  
+- **Visual References**: The interface highlights options for generating reports, filtering data, and exporting results.",user_manual,Asset
+"**6: Asset Requisition Requests**  
+- **Menu Navigation**: `Employee → Asset → Asset Requisition Request`  
+- **Purpose**:  
+  - Streamlines the process for employees to request organizational assets.  
+  - Enables admins to manage these requests effectively.  
+- **Workflow**:  
+  1. Employees submit requests through the system.  
+  2. The admin reviews the requests and decides to approve or reject them.  
+  3. Once approved, the asset is assigned, and the status is updated.  
+- **Features**:  
+  - View pending requests in a queue.  
+  - Approve or reject requests with comments, if necessary.  
+- **Use Case**:  
+  - If a team requires additional monitors for a project, team members can submit requests, and admins can process them accordingly.  
+- **Visual References**: The interface displays a list of pending requests with actions like ""Approve"" or ""Reject.""",user_manual,Asset
+"### **1. Employee Dashboard**
+- **Description:** Overview of employee statistics, such as monthly active employees, branch-wise blood group stats, job status distribution, and religious diversity graphs.
+- **Use Case:** Enables HR to visualize workforce metrics efficiently.
+- **Key Points:** 
+  - Monthly active employees.
+  - Branch-wise and job-status-wise distributions.
+  - Blood group and religious diversity graphs.
+",user_manual,Employee
+"### **2. Employee Operations**
+#### **a. Employee List**
+- **Description:** Manage employee details including personal info, contact, education, family, and more.
+- **Key Operations:**
+  - Add/Edit/Delete employee information.
+  - Record NID/SSN, marital status, and employee codes.
+  - Maintain addresses with ""same as present address"" options.
+- **Subsections:**
+  - **Contact:** Store present and permanent addresses.
+  - **Family:** Add family member details like name, relationship, and profession.
+  - **Education:** Save educational qualifications, CGPA, and institutions.
+  - **Employment:** Track previous work experiences.
+  - **Supervisor:** Set up reporting hierarchies for approvals.
+  - **Documents:** Upload CVs, photos, and other documents.
+  - **Language:** Store language proficiencies.
+  - **Passport:** Save passport details like issue/expiry dates.
+  - **Talent:** Record additional employee talents.
+  - **Bank:** Store banking details for salary disbursement.
+  - **Hide from Directory:** Option to hide employee details from the app's directory.
+
+#### **b. Award**
+- **Description:** Manage and assign awards to employees.
+- **Key Details:** Employee name, award type, prize, and relevant documents.
+
+#### **c. Disciplinary Records**
+- **Description:** Manage warnings and disciplinary actions.
+- **Key Details:** Record action type, date, and remarks.
+
+#### **d. Organogram**
+- **Description:** Visualize organizational hierarchy.
+- **Key Features:** Branch-wise supervisor relationships.",user_manual,Employee
+"### **3. Employee Reports**
+#### **a. Employee Position**
+- **Description:** Generate reports on employee positions and job levels.
+#### **b. Employee Religion and Blood Group**
+- **Description:** Generate detailed PDF reports filtered by religion or blood group.
+#### **c. Contact Reports**
+- **Description:** View employee contact details grouped by department or branch.
+#### **d. Template Reports**
+- **Description:** Use predefined formats for generating specific reports.
+",user_manual,Employee
+"### **4. Employee Settings**
+#### **a. Division/Department/Unit**
+- **Description:** Define and manage organizational divisions and departments.
+#### **b. Job Base and Levels**
+- **Description:** Manage employment types (e.g., contractual, permanent) and levels (e.g., junior, senior).
+#### **c. Designation and Functional Designation**
+- **Description:** Set roles and responsibilities at functional levels.
+#### **d. Education**
+- **Description:** Manage education categories, grades, and institutions.
+#### **e. Talent Type**
+- **Description:** Record and manage talent categories like performers or athletes.
+#### **f. Employee and Document Categories**
+- **Description:** Classify employees and their associated documents.
+#### **g. Award and Warning Types**
+- **Description:** Define types of awards and warnings applicable to employees.",user_manual,Employee
+"### 1: **Introduction to Gratuity**
+- **Definition**: Gratuity is a financial benefit provided to employees based on their service length with the company.
+- **Prerequisites**:
+  - Employees must have a salary structure.
+  - The employee must be actively employed at the time of gratuity calculation.",user_manual,Gratuity
+"### 2: **Gratuity Policy Overview**
+1. **Minimum Service Length**:
+   - Employees must meet the minimum service duration (defined in months) set by the company to qualify for gratuity.
+2. **Complete Service Length Type**:
+   - Four types of service length calculations:
+     - **Round**: Service length is rounded up (e.g., 4.5 years → 5 years).
+     - **Ceiling**: Service length is the next full year (e.g., 4.3 years → 5 years).
+     - **Flooring**: Service length is rounded down (e.g., 4.4 years → 4 years).
+     - **As it is**: Service length remains as the exact decimal value (e.g., 4.5 years → 4.5 years).
+3. **Salary Consideration**:
+   - If **basic salary** is selected, it is used in the gratuity calculation; otherwise, the **gross salary** is used.
+4. **Year-wise Gratuity Configuration**:
+   - Admin defines year slots and corresponding salary multipliers.
+   - Example: For the first 10 years, the multiplier might be set to 1x salary.
+   - Admin must maintain sequential year slot values (e.g., 5 years cannot follow 3 years).
+   - Slots can be deleted, but only the most recent configuration can be removed first.",user_manual,Gratuity
+"### 3: **Gratuity Calculation Process**
+- **Steps**:
+  1. **Service Length in Months**:
+     - Calculate the total service duration in months (difference between joining and calculation dates).
+  2. **Service Length in Years**:
+     - Convert months to years using the ""Complete Service Length Type"" from the policy.
+  3. **Salary Multiplier**:
+     - Determine the salary multiplier by comparing the service year with the configured year slots.
+  4. **Salary Amount**:
+     - Multiply the selected salary type (basic/gross) by the multiplier.
+  5. **Gratuity Amount**:
+     - Multiply the service length in years by the calculated salary amount.
+- **Payment Status**:
+  - **Paid**: Admin can view details.
+  - **Unpaid**: Admin can recalculate or proceed with the payment.",user_manual,Gratuity
+"### 4: **Gratuity Report**
+- **Purpose**: Summarizes gratuity data for the organization.
+- **Filters**:
+  - Employee
+  - Branch
+  - Department
+  - Payment Status
+- **Access**:
+  - Navigate to `Salary > Gratuity > Gratuity Report`.
+- **Features**:
+  - Generate reports based on selected filters.
+  - View detailed records of gratuity calculations and payment statuses.",user_manual,Gratuity
+"### **1. Leave Overview**
+The Leave Module in PiHR consists of four main components:
+- **Dashboard:** Visual insights into leave statuses, leave calendar, and usage graphs.
+- **Operations:** Functionalities for managing leave and visit applications, and leave adjustments.
+- **Reports:** Detailed analytics on leave balances, summaries, and various trends.
+- **Settings:** Configurations for leave types, groups, approvers, and eligibility.",user_manual,Leave
+"### **2. Leave Dashboard**
+- **Menu Link:** Leave Dashboard
+- **Functions:**
+  1. **Leave Calendar:** View leave schedules of employees.
+  2. **Leave Status:** Monitor leave balances for all employees.
+  3. **Leave Graphs:** Insights into leave types and their usage patterns.",user_manual,Leave
+"### **3. Leave Application**
+- **Menu Link:** Leave → Operation → Leave Application
+- **Admin Functions:**
+  - Create new leave applications.
+  - Edit, approve, or reject employee leave applications.
+- **Key Actions:**
+  - Input employee details, leave type, date, reason, and other specifications.
+  - For foreign leave, include passport and country details.
+  - Status: Approve/Reject leave applications.",user_manual,Leave
+"### **4. Visit Application**
+- **Menu Link:** Leave → Operation → Visit Application
+- **Purpose:** To manage and approve employee visit requests.
+- **Key Steps:**
+  - Add visit details: employee name, date, and purpose.
+  - Approve or reject visit requests.",user_manual,Leave
+"### **5. Leave Adjustment**
+- **Menu Link:** Leave → Operation → Leave Adjustment
+- **Function:** Adjust leave balances for employees.
+- **Steps:**
+  - View current leave balances.
+  - Add or subtract leave amounts by selecting the leave type.
+  - Confirm adjustments by saving changes.",user_manual,Leave
+"### **6. Leave Reports**
+#### **6.1. Employee Leave Balance**
+- **Menu Link:** Leave → Report → Employee Leave Balance
+- View balances for individual or all employees.
+- Use filters for advanced searches.
+
+#### **6.2. Leave Summary Report**
+- **Menu Link:** Leave → Report → Leave Summary
+- Generate leave summaries for specific employees or all employees.
+
+#### **6.3. Leave Analysis Report**
+- **Menu Link:** Leave → Report → Leave Analysis Report
+- Analyze trends based on leave types and dates.
+
+#### **6.4. Visit Report**
+- **Menu Link:** Leave → Report → Visit Report
+- Overview of employee visit activities.
+
+#### **6.5. Leave Adjustment Report**
+- **Menu Link:** Leave → Report → Leave Adjustment Report
+- Details of leave adjustments categorized by type.
+
+#### **6.6. Leave Approver History Report**
+- Track the history of leave approval actions.
+
+#### **6.7. Employee Earn Leave Report**
+- Separate detailed and summarized views of earned leave.",user_manual,Leave
+"### **7. Leave Settings**
+#### **7.1. Leave Types**
+- **Menu Link:** Leave → Setting → Leave Type
+- Define types of leaves, such as unpaid or maternity leave.
+
+#### **7.2. Leave Groups**
+- **Menu Link:** Leave → Setting → Leave Group
+- Assign leave types and set rules like balances and limits.
+
+#### **7.3. Current Leave Status**
+- **Menu Link:** Leave → Setting → Current Leave Status
+- Update leave balances by employee or job role.
+
+#### **7.4. Leave Year**
+- **Menu Link:** Leave → Setting → Leave Year
+- Close the leave year, ensuring all pending leaves are processed.
+
+#### **7.5. Leave Process Policy**
+- **Menu Link:** Leave → Setting → Leave Process Policy
+- Configure yearly leave start/end, multiple application permissions, and reliever policies.
+
+#### **7.6. Approver Setup**
+- **Menu Link:** Leave → Setting → Approver Setup
+- Define approvers for leave requests.
+
+#### **7.7. Eligible Employee**
+- **Menu Link:** Leave → Setting → Eligible Employee
+- Determine which employees are eligible for leave functionalities.",user_manual,Leave
+"### **1. Overview of the Salary Module**
+- **Purpose**: Provides comprehensive information on employee salaries, salary structure creation, bonus generation, and report generation.
+- **Key Features**:
+  - Salary Operations
+  - Bonus Operations
+  - Reports
+  - Settings",user_manual,Salary
+"### **2. Salary Operations**
+
+#### **2.1. Salary Structure**
+- **Menu Link**: `Salary → Salary Operation → Salary Structure`
+- **Procedures**:
+  - Assign employee names and salary groups.
+  - Choose whether salary is consolidated or itemized.
+  - Define the payment method (Bank or Cash).
+  - Specify the ""Structure Date.""
+  - Save configurations.
+
+#### **2.2. Held Up Employee**
+- **Menu Link**: `Salary → Salary Operation → Held Up Employee`
+- **Procedures**:
+  - Pause employee salary payments until a specified date.
+  - Admin must select the employee and set a ""hold date.""
+
+#### **2.3. Salary Generation**
+- **Menu Link**: `Salary → Salary Operation → Salary Generation`
+- **Procedures**:
+  - Select branch, year, and month.
+  - Generate salary for all or specific employees.
+  - Calculate roster-based work hours for hourly wages.
+
+#### **2.4. Salary Adjustment**
+- **Menu Link**: `Salary → Salary Operation → Salary Adjustment`
+- **Procedures**:
+  - Add additional amounts post salary generation.
+  - Save adjustments.
+
+#### **2.5. Salary Modification**
+- **Menu Link**: `Salary → Salary Operation → Salary Modification`
+- **Procedures**:
+  - Increase or decrease salary amounts.
+  - Specify headers for adjustments.
+
+#### **2.6. Salary Verification**
+- **Menu Link**: `Salary → Salary Operation → Salary Verification`
+- **Procedures**:
+  - Verify generated and modified salaries.
+  - Set the verification status (yes/no).
+
+#### **2.7. Salary Payment**
+- **Menu Link**: `Salary → Salary Operation → Salary Payment`
+- **Procedures**:
+  - Select branch, year, and month.
+  - Initiate bank transfers or cash payments.
+  - Save transaction details.
+
+#### **2.8. Email Pay Slip**
+- **Menu Link**: `Salary → Salary Operation → Email Pay Slip`
+- **Procedures**:
+  - Email salary pay slips to employees.
+  - Filter by year and month before sending.",user_manual,Salary
+"### **3. Bonus Operations**
+
+#### **3.1. Bonus Policy**
+- **Menu Link**: `Salary → Bonus Operation → Bonus Policy`
+- **Procedures**:
+  - Define policies such as eligibility duration after joining.
+
+#### **3.2. Bonus Type**
+- **Menu Link**: `Salary → Bonus Operation → Bonus Type`
+- **Procedures**:
+  - Set bonus categories (e.g., Eid-ul-Adha, Eid-ul-Fitr).
+
+#### **3.3. Yearly Bonus Setup**
+- **Menu Link**: `Salary → Bonus Operation → Yearly Bonus Setup`
+- **Procedures**:
+  - Define the frequency, type, and percentage of bonuses.
+
+#### **3.4. Bonus Generation**
+- **Menu Link**: `Salary → Bonus Operation → Bonus Generation`
+- **Procedures**:
+  - Generate bonuses based on type, branch, or employee.
+
+#### **3.5. Bonus Modification**
+- **Menu Link**: `Salary → Bonus Operation → Bonus Modification`
+- **Procedures**:
+  - Adjust bonus amounts if necessary.",user_manual,Salary
+"### **4. Salary Reports**
+
+#### **4.1. Pay Slip**
+- **Menu Link**: `Salary → Reports → Pay Slip`
+- **Procedures**:
+  - Generate regular and double pay slips for specific months.
+
+#### **4.2. Salary Certificate**
+- **Menu Link**: `Salary → Reports → Salary Certificate`
+- **Procedures**:
+  - Print salary certificates for employees.
+
+#### **4.3. Salary Analysis**
+- **Menu Link**: `Salary → Reports → Salary Analysis`
+- **Procedures**:
+  - Review monthly salary data.
+  - Export reports to Excel.
+
+#### **4.4. Bonus Reports**
+- **Menu Links**:
+  - `Salary → Reports → Bonus Statement`
+  - `Salary → Reports → Bonus Analysis`
+- **Procedures**:
+  - View bonus distribution and analysis.
+
+#### **4.5. Claim Report**
+- **Menu Link**: `Salary → Reports → Claim Report`
+- **Procedures**:
+  - Summarize employee claims for a specified period.",user_manual,Salary
+"### **5. Salary Settings**
+
+#### **5.1. Salary Generation Policy**
+- **Menu Link**: `Salary → Settings → Salary Gen. Policy`
+- **Procedures**:
+  - Define salary days (actual, working, or fixed).
+
+#### **5.2. Consolidate Salary Breakdowns**
+- **Menu Link**: `Salary → Settings → Consolidate Salary Breakdowns`
+- **Procedures**:
+  - Set breakdown percentages for salary components.
+
+#### **5.3. Bank Setup**
+- **Menu Link**: `Salary → Settings → Bank`
+- **Procedures**:
+  - Configure company bank accounts.
+
+#### **5.4. Increment and Adjustments**
+- **Menu Links**:
+  - `Salary → Settings → Increment Breakup`
+  - `Salary → Settings → Adjustment Purpose`
+- **Procedures**:
+  - Define increments and adjustment headers.
+
+#### **5.5. Employee Eligibility**
+- **Menu Link**: `Salary → Settings → Eligible Employee`
+- **Procedures**:
+  - Determine employee eligibility for salary.",user_manual,Salary
+"### **6. Salary Claims and Advances**
+
+#### **6.1. Claim Management**
+- **Menu Links**:
+  - `Salary → Claim → Claim`
+  - `Salary → Claim → Claim Category`
+  - `Salary → Claim → Claim Setting`
+- **Procedures**:
+  - Define and approve employee claims.
+
+#### **6.2. Advance Salary**
+- **Menu Link**: `Salary → Advance Salary`
+- **Procedures**:
+  - Process advance salary requests.
+  - Maintain repayment schedules.",user_manual,Salary
+"### **1. Overview of Settings Module**
+The Settings Module is a key component of PiHR, containing features like:
+- Application Security
+- Master Settings
+- Attendance Notifications
+- User Login History Report
+- Notice Board
+- Customer Management
+
+Each section serves distinct purposes, enabling comprehensive management of HR and payroll systems.",user_manual,Settings
+"### **2. Security Settings**
+#### **2.1 User**
+**Menu Link:** Settings → Security → User  
+**Functions:**  
+1. Manage user permissions for the PiHR application.
+2. Change user passwords (requires email notification for security).
+3. Convert user types (e.g., Employee to Admin, Admin to Employee).
+4. Create Admin Category users.
+
+**Notes:**  
+- Ensure proper User Category application is in place.
+- Users must update their passwords upon email notification.
+
+#### **2.2 Device Change Request**
+**Menu Link:** Settings → Security → Device Change Request  
+**Functions:**  
+- Employees can request to switch login devices.  
+- Admins approve or reject these requests.  
+- Tracks current login device and facilitates PUSH notifications.
+
+#### **2.3 IP Whitelist**
+**Menu Link:** Settings → Security → IP Whitelist  
+**Functions:**  
+- Restrict attendance marking to specific IP addresses.
+- Set the IP and whitelist it for attendance.",user_manual,Settings
+"### **3. Settings**
+#### **3.1 State**
+**Menu Link:** Settings → Setting → State  
+**Description:** Displays a list of all states within Bangladesh for easy reference.
+
+#### **3.2 Report Template**
+**Menu Link:** Settings → Setting → Report Template  
+**Functions:**  
+- Create templates for reports (e.g., Employment Certificate, NOC).  
+- Customize text, alignment, and formatting.  
+- Generate reports with employee data using predefined formats.
+
+**Steps to Create:**
+1. Create a desired format template.
+2. Use necessary hashtags.
+3. Edit text and alignment as needed.
+4. Save and print reports.
+
+
+#### **3.3 City**
+**Menu Link:** Settings → Setting → City  
+**Description:** Displays a list of cities within Bangladesh for user access.
+
+
+#### **3.4 Branch**
+**Menu Link:** Settings → Setting → Branch  
+**Functions:**  
+- Record and manage office branches.
+- Create new branches using the ""Add New"" feature.
+
+**Steps:**  
+1. Add a new branch using the form provided.  
+2. Save the form to list the branch.
+
+**Notes:**  
+- Define the main branch and adjust attendance hotspots.  
+- Notify about timezone differences if applicable.",user_manual,Settings
+"### **4. Notifications Settings**
+#### **4.1 Attendance Notification**
+**Menu Link:** Settings → Notifications  
+**Functions:**  
+- Send daily attendance reports via email to specific employees.
+
+**Steps to Configure:**  
+1. Click ""Add New.""  
+2. Fill the form with details.  
+3. Save using the ""Update Notification"" button.",user_manual,Settings
+"### **5. Reports Settings**
+#### **5.1 User Login History Report**
+**Menu Link:** Settings → User Login History  
+**Functions:**  
+- View login history for specific users.
+- Generate login/logout reports with date and IP details.
+
+**Steps to Generate:**  
+1. Select ""From Date"" and ""To Date.""  
+2. Click ""Show Report"" to generate the desired report.",user_manual,Settings
+"### **6. Notice Board Settings**
+**Menu Link:** Settings → Notice Board  
+**Functions:**  
+- Publish or draft notifications for the company or specific employees.  
+
+**Steps:**  
+1. Use ""Add New"" to create a notification.  
+2. Save as draft or publish to the intended audience.",user_manual,Settings
+"### **7. Customer Management Settings**
+**Menu Link:** Settings → Customer  
+**Functions:**  
+- Maintain a list of client companies and their branches.  
+- Useful for integrating with task modules and check-ins.
+
+**Steps to Add a Customer:**  
+1. Click ""Add New.""  
+2. Provide customer and branch details.",user_manual,Settings
+"### **1. Overview of the Task Module**
+The Task Module is an integral part of PiHR's HR & Payroll management system, designed to assign, manage, and track tasks efficiently. Key components include:
+- **Dashboard**
+- **Task Management**
+- **Task Categories**
+- **Task Priorities**
+- **Task Status**
+- **Task Reports**
+",user_manual,Task
+"### **2. Dashboard**
+**Menu Link:** `Task → Dashboard`
+
+The dashboard provides an overview of assigned tasks within the organization. Key functionalities:
+- Assign tasks to supervisors or employees.
+- View the current status and progress of tasks.
+- Employees and supervisors can be selected as assignees.
+- Features to filter tasks by:
+  - Employee name
+  - Date
+  - Department
+  - Status
+  - Priority",user_manual,Task
+"### **3. Task Management**
+**Menu Link:** `Task → Task`
+
+This section outlines the steps to manage and create tasks:
+- **Create a New Task:**
+  - Use the ""Add New"" button to initiate task creation.
+  - Input required details:
+    - Task Title
+    - Assignee (selected from a list)
+    - Start Date and End Date
+    - Task Category, Priority, and Status (must be predefined)
+    - Task Description
+    - Attach files if necessary
+  - Save the task to assign it.
+
+- The interface allows administrators to:
+  - View tasks by filters (date, department, etc.).
+  - Monitor task progress and assignments in real time.",user_manual,Task
+"### **4. Task Category**
+**Menu Link:** `Task → Task Category`
+
+Used to classify tasks. Instructions for creating and managing categories:
+- Navigate to the Task Category section.
+- Use the ""Add New"" button to create a category.
+- Provide the category name.
+- Configure access settings:
+  - Enable supervisor access.
+  - Allow employees to check in (with location tracking).
+  - Permit commenting on tasks.",user_manual,Task
+"### **5. Task Priority**
+**Menu Link:** `Task → Task Priority`
+
+Defines the importance level of tasks to streamline workflows:
+- Each priority level can be assigned a unique name and color.
+- Higher priority tasks are easily distinguishable.
+- Use the ""Add New"" button to set priority levels.
+  - Input the priority name and select a representative color.
+  - Save the configuration to finalize.",user_manual,Task
+"### **6. Task Status**
+**Menu Link:** `Task → Task Status`
+
+Enables the tracking of task progress through predefined statuses:
+- Create new statuses via the ""Add New"" button.
+- Define the status by:
+  - Name
+  - Order (priority or sequence in a dropdown)
+  - Representative color
+- Save to make the status available in the system.",user_manual,Task
+"### **7. Task Report**
+**Menu Link:** `Task → Task Report`
+
+Facilitates reporting and analysis of task data:
+- Generate reports based on task assignments and completions.
+- Filter reports by:
+  - Employee
+  - Date
+  - Status
+  - Department
+- Provides a holistic view or specific insights based on selected criteria.
+- Allows administrators to download and analyze task performance metrics.",user_manual,Task
+"### **1. Overview of the Tax Module**
+- **Purpose**: Centralized module for managing tax-related information.
+- **Key Features**:
+  - Dashboard for navigation.
+  - Global Configuration for setup.
+  - Operations for managing taxes (e.g., monthly/yearly collections).
+  - Reports for tax summaries and detailed statements.
+  - Settings for tax policies and configurations.
+",user_manual,Tax
+"### **2. Tax Dashboard**
+- **Menu Path**: Tax → Dashboard
+- **Description**: Displays a visual representation of tax functionalities, including steps to utilize the tax module effectively.",user_manual,Tax
+"### **3. Tax Global Configuration**
+- **Menu Path**: Tax → Global Configuration
+- **Setup Methods**:
+  1. **Apply BD Govt. Rules**: Use predefined Bangladeshi government regulations for tax collection.
+  2. **On Percentage**: Configure tax collection based on specific percentage rules.
+- **Next Step**: Proceed to tax settings after completing the global configuration.",user_manual,Tax
+"### **4. Tax Settings**
+#### **Tax Policy**
+- **Menu Path**: Tax → Setting → Tax Policy
+- **Description**: Define and manage tax policies applicable to employees.
+
+#### **Tax Factor**
+- **Menu Path**: Tax → Setting → Tax Factor
+- **Description**: Establish factors affecting tax calculations (e.g., exemptions, additional charges).
+
+#### **Bonus Year & Months**
+- **Menu Path**: Tax → Setting → Bonus Year & Months
+- **Procedure**:
+  - Record bonus information for accurate year-end tax calculation.
+  - Specify the financial year and relevant months for bonuses.
+
+#### **Tax Year**
+- **Menu Path**: Tax → Setting → Tax Year
+- **Procedure**:
+  - Monitor the ongoing financial year.
+  - Use the ""Closed Year"" option to finalize the current fiscal year after ensuring all details (e.g., policy changes, bonuses, investments) are accurate.
+
+#### **Medical Information**
+- **Menu Path**: Tax → Setting → Medical Information
+- **Description**: Record employee medical information affecting tax calculations.
+
+#### **Investment Information**
+- **Menu Path**: Tax → Setting → Investment Information
+- **Description**: Log employee investment details for tax deduction considerations.",user_manual,Tax
+"### **5. Tax Operations**
+#### **Employee Tax Provision**
+- **Menu Path**: Tax → Operation → Employee Tax Provision
+- **Procedure**:
+  - Calculate employee tax obligations.
+  - Add new employees under the tax provision, specifying details like ID and payment.
+
+#### **Monthly Tax Collection**
+- **Menu Path**: Tax → Operation → Monthly Tax Collection
+- **Procedure**:
+  - Collect tax either by:
+    - **Branch-wise**: Consolidate by branches.
+    - **Employee-wise**: Collect for specific employees.
+  - Use the “Collect Monthly Tax” button for selected branches or employees.
+
+#### **Modify Monthly Tax Collection**
+- **Menu Path**: Tax → Operation → Modify Monthly Tax Collection
+- **Procedure**:
+  - Edit employee tax details before processing salaries.
+  - Post-salary tax adjustments require using the “Salary Modification” option.
+
+#### **Yearly Income Tax**
+- **Menu Path**: Tax → Operation → Yearly Income Tax
+- **Description**: Consolidated view and management of yearly income tax.",user_manual,Tax
+"### **6. Tax Reports**
+#### **Monthly Tax Provision**
+- **Menu Path**: Tax → Report → Monthly Tax Provision
+- **Description**: Provides a monthly breakdown of collected tax amounts.
+
+#### **Monthly Tax Collection**
+- **Menu Path**: Tax → Report → Monthly Tax Collection
+- **Description**: Displays detailed monthly collection reports.
+
+#### **Tax Provision Statement**
+- **Menu Path**: Tax → Report → Tax Provision Statement
+- **Procedure**: Report on the total tax deducted from employees.
+
+#### **Yearly Tax Statement**
+- **Menu Path**: Tax → Report → Yearly Tax Statement
+- **Procedure**: Generate a comprehensive tax report for the year.",user_manual,Tax
+"### **7. Tax Figures and Visual Aids**
+The manual includes diagrams and screenshots for the following:
+- Dashboard
+- Global Configuration
+- Tax Policies and Factors
+- Bonus and Tax Year Settings
+- Tax Operations (Monthly/Yearly)
+- Reporting Screens",user_manual,Tax
+"### **Employee Tracking Module**
+The Employee Tracking module is designed to monitor employees conducting office-related tasks outside the company premises. It offers features for creating tracking schedules, reviewing tracking history, and generating tracking reports for outgoing employees.",user_manual,Tracking
+"### **Employee Monitoring**
+**Menu Navigation**: Employee → Employee Tracking → Employee Monitoring
+
+The Employee Monitoring feature is divided into two categories:
+1. **Last Location**
+2. **Tracking History**
+
+#### **Last Location**
+- **Menu Navigation**: Employee → Employee Tracking → Employee Monitoring → Last Location
+- **Procedure**:
+  - Select the employee’s name, branch, and department.
+  - Click the ""Track Last Position"" button to view the employee’s most recent location.
+  - Alternatively, clicking the employee’s photo/icon also reveals the last position.",user_manual,Tracking
+"#### **Tracking History**
+- **Menu Navigation**: Employee → Employee Tracking → Employee Monitoring → Tracking History
+- **Procedure**:
+  - View employee tracking through:
+    - **Plotting**: Displays the specific times and locations for employees tracked during their office tasks.
+      - Input the employee’s name, start time, and end time for the tracking period.
+      - Click ""Track History"" to generate plotted data.
+    - **Runtime**: Displays the routes and times used by employees to reach their destinations.
+      - Similar input fields as Plotting; use ""Track History"" to generate runtime data.",user_manual,Tracking
+"### **Tracking Enabled Employee**
+- **Menu Navigation**: Employee → Employee Tracking → Tracking Enabled Employee
+- **Procedure**:
+  - Click the ""Search Employee"" button to display a list of employees.
+  - Select employees for tracking by checking the boxes next to their names and clicking ""Save Selected.""
+  - To add new employees to the tracking list:
+    - Click ""Add New.""
+    - Fill out the form and click ""Save.""",user_manual,Tracking
+"### **Tracking Schedules**
+- **Menu Navigation**: Employee → Employee Tracking → Tracking Schedules
+- **Procedure**:
+  - Create schedules for tracking employees:
+    - Click ""Add New.""
+    - Define the schedule name, start time, and end time. Enable tracking by checking the ""Tracking Enabled"" box.
+    - Save the policy by clicking ""Save.""
+  - Mapping Employees to Policies:
+    - Click ""View Mappings"" to manage mappings for the schedule.
+    - Use ""Add Mappings"" to include all or specific employees in the tracking schedule.
+    - Save changes after mapping.",user_manual,Tracking
+"### **Tracking History Report**
+- **Menu Navigation**: Employee → Employee Tracking → Tracking History Report
+- **Procedure**:
+  - Retrieve all tracking reports by:
+    - Selecting the employee’s name.
+    - Specifying the start and end time of the desired tracking period.
+    - Clicking ""Show Tracking Report"" to generate and view the report.",user_manual,Tracking
+"What does PiHR HR Software do? PiHR serves as a comprehensive HRIS (Human Resource Information System) and HRM (Human Resource Management) software, offering a range of features to automate your HR processes. We provide important features on our HR software like attendance management systems, shift management, employee leave management, payroll management systems, tax management, expense management, employee management, employee tracking, tasks management, digital noticeboard, notification, face recognition attendance system, and more.",FAQ,"Intro, FAQ"
+"How will my business benefit from PiHR's HR Software?PiHR's HR Software offers numerous benefits for your business in Bangladesh. It enhances efficiency, reduces administrative workload, and ensures compliance with local regulations. The software automates tasks like payroll, attendance tracking, and employee management, allowing you to focus on strategic aspects of your business. Also, it delivers invaluable insight so that everyone can work smarter together.",FAQ,"FAQ, Intro, Benefit"
+"Does PiHR's HR software do payroll? PiHR serves as a comprehensive HRIS (Human Resource Information System) and HRM (Human Resource Management) software, offering a range of features to automate your HR processes. We provide important features on our HR software like attendance management systems, shift management, employee leave management, payroll management systems, tax management, expense management, employee management, employee tracking, tasks management, digital noticeboard, notification, face recognition attendance system, and more.",FAQ,"FAQ, payroll"
+"How will I choose the best HR software in Bangladesh? Choosing the best HR software in Bangladesh involves considering key factors tailored to your business needs. Start by assessing your specific HR requirements, such as payroll management, attendance tracking, and cloud-based HR solutions. Look for a solution that aligns with the size and industry of your business.",FAQ,"FAQ, Intro, Best HR Software"
+"Is PiHR the best software in Bangladesh? Yes, PiHR is the best HR software in Bangladesh. Its comprehensive features, HR and payroll functions, user-friendly interface, and commitment to compliance with local regulations make it a top choice for businesses seeking efficient and reliable HR management software.",FAQ,"FAQ, Intro, Best HR Software"
+"Is PiHR's HR software suitable for small business in Bangladesh? Yes, PiHR's HR software is suitable for small businesses as well as mid-size and large enterprise businesses. We have built different types of packages. Choose a price package that suits your business.",FAQ,"FAQ, Intro, Small Business"
+How much does PiHR's HRM Software cost? Our PiHR's HR Software and Service cost varies depending on employees and organization size. Tiny: For 1 - 25 Employee. Small: For 26 - 50 Employees Mid: For 51 - 100 Employees Large: For 100+ Employees To know more check out our packages.,FAQ,"FAQ, Intro, Cost"
+Can I see a demo of PiHR's HR management software? Of course! Request a call: +880 17 1342 8432   or schedule a meeting with our team and they will be happy to show you around our platform.,FAQ,"FAQ, Intro, Demo"
+Can PiHR's HR software be customized to fit my organization's specific needs? Absolutely! PiHR's HR software is highly customizable to meet the specific needs of your organization. Send us a email and our team will get back to you asap.,FAQ,"FAQ, Intro, Customization"
+"Is PiHR's software a cloud-based HR software in Bangladesh? Yes, PiHR's HR software is a cloud-based HR solution available in Bangladesh. Our clients experience the advantages of modern Cloud HR software, including enhanced security measures, cost-effectiveness, and the convenience of automatic updates.",FAQ,"FAQ, Intro, Cloud"
+"How does PiHR ensure the security of my employee data? Yes, we know how important it is to setup and run HR software smoothly. So we provide a free PiHR Setup and core HR data upload service alongside a range of cost-effective implementation services.",FAQ,"FAQ, Intro, Security"
+"Do you provide support? Yes, you can rely on our professional support team who will provide you with helpful support and training. Need any support? Call: +8809606881188",FAQ,"FAQ, Intro, Support"
+"Do you have mobile application for PiHR? Yes, PiHR offers mobile applications for both Android and IOS.",FAQ,"FAQ, Intro, Mobile"

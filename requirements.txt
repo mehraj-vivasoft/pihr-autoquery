@@ -1,0 +1,12 @@
+fastapi
+python-dotenv
+openai
+sqlalchemy
+databases
+pyodbc
+uvicorn
+fastapi[standard]
+weaviate
+weaviate-client
+pymongo
+gunicorn
