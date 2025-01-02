@@ -13,7 +13,7 @@ async def get_db() -> DBInterface:
     """Dependency to ensure MongoDB is connected with proper error handling."""
     db_instance = None
     try:
-        db_instance = MongoDB(uri="mongodb://admin:kothinAdminPass@localhost:27017", db_name="chat_db")
+        db_instance = MongoDB(uri="mongodb://admin:kothinAdminPass@mongodb:27017", db_name="chat_db")
         db_instance.connect()
         
         if db_instance.db is None:
