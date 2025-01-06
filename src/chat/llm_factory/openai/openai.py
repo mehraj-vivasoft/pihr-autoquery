@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from openai import OpenAI
 
+from src.chat.llm_factory.prompts.generate_conversation_title import generate_conversation_title, ConversationTitleResponse
 from src.chat.llm_factory.llm_interface import LLMInterface
 from src.chat.llm_factory.prompts.chat_prompt import get_chat_prompt, AssistantResponse
 from src.chat.llm_factory.prompts.guardrail import get_guardrail_prompt, GurdrailResponse
@@ -64,3 +65,23 @@ class OpenAiLLM(LLMInterface):
             is_safe=response.is_safe,
             reasoning_for_safety_or_danger=response.reasoning_for_safety_or_danger
         )
+    
+    async def generate_title(self, query: str) -> str:
+        prompt = generate_conversation_title(query)
+        
+        print("Generate title for query : " + query)
+        
+        completion = self.client.beta.chat.completions.parse(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": prompt.system_prompt},
+                {"role": "user", "content": prompt.user_prompt},
+            ],
+            response_format=ConversationTitleResponse
+        )
+        
+        response = completion.choices[0].message.parsed
+        
+        print(response)
+        
+        return response.conversation_title

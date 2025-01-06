@@ -108,7 +108,7 @@ class MongoDB(DBInterface):
         conversations_collection = self.db["conversations"]
         current_timestamp = self._get_current_timestamp()        
         
-        if not conversations_collection.find_one({"id": conversation_id}):
+        if not conversations_collection.find_one({"id": conversation_id}):            
             self.create_conversation(conversation_id=conversation_id, subject=first_message, user_id=first_user_id)
         else:
             conversations_collection.update_one(

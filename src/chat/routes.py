@@ -65,7 +65,7 @@ async def complete_query(chat_init: ChatRequest, llm: LLMInterface = Depends(get
     """    
     
     assistant_response = None
-    validation_chk = await llm.check_validation(chat_init.question)        
+    validation_chk = await llm.check_validation(chat_init.question)
     
     if validation_chk.is_safe:        
         assistant_response = await llm.generate_response(
@@ -90,27 +90,33 @@ async def complete_query(chat_init: ChatRequest, llm: LLMInterface = Depends(get
     #     msg_summary=assistant_response
     # )
     
-    user_msg, ai_msg = await db.post_two_chats(
-        conversation_id=chat_init.conversation_id,
-        first_user_id=chat_init.user_id,
-        first_role="user",
-        first_message=chat_init.question,
-        first_msg_summary=chat_init.question,
-        second_user_id=chat_init.user_id,
-        second_role="assistant",
-        second_message=assistant_response,
-        second_msg_summary=assistant_response
-    )
     
-    if chat_init.is_new:        
+    
+    if chat_init.is_new:
+        
+        conv_title = await llm.generate_title(chat_init.question)
+        
         db.create_conversation(
             conversation_id=chat_init.conversation_id,
-            subject=chat_init.question,
+            subject=conv_title,
             user_id=chat_init.user_id
-        )        
+        )
+        
+        user_msg, ai_msg = await db.post_two_chats(
+            conversation_id=chat_init.conversation_id,
+            first_user_id=chat_init.user_id,
+            first_role="user",
+            first_message=chat_init.question,
+            first_msg_summary=chat_init.question,
+            second_user_id=chat_init.user_id,
+            second_role="assistant",
+            second_message=assistant_response,
+            second_msg_summary=assistant_response
+        )
+        
         return NewConversationModel(conversation_id=chat_init.conversation_id, 
                                     user_id=chat_init.user_id,
-                                    subject=chat_init.question,
+                                    subject=conv_title,
                                     created_at=user_msg.created_at,
                                     updated_at=user_msg.updated_at,
                                     is_new=True,
@@ -122,6 +128,17 @@ async def complete_query(chat_init: ChatRequest, llm: LLMInterface = Depends(get
         
     else:
         print("Continuing Conversation")                
+        user_msg, ai_msg = await db.post_two_chats(
+            conversation_id=chat_init.conversation_id,
+            first_user_id=chat_init.user_id,
+            first_role="user",
+            first_message=chat_init.question,
+            first_msg_summary=chat_init.question,
+            second_user_id=chat_init.user_id,
+            second_role="assistant",
+            second_message=assistant_response,
+            second_msg_summary=assistant_response
+        )
         return MessageModel(message_id=ai_msg.message_id,
                             conversation_id=ai_msg.conversation_id,
                             content=ai_msg.message,

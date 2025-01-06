@@ -13,3 +13,7 @@ class LLMInterface(ABC):
     @abstractmethod
     async def check_validation(self, query: str) -> GurdrailResponse:
         pass
+    
+    @abstractmethod
+    async def generate_title(self, query: str) -> str:
+        pass
