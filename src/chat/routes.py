@@ -74,20 +74,32 @@ async def complete_query(chat_init: ChatRequest, llm: LLMInterface = Depends(get
     else:        
         assistant_response = validation_chk.reasoning_for_safety_or_danger
         
-    await db.post_chat(
-        conversation_id=chat_init.conversation_id,
-        user_id=chat_init.user_id,
-        role="user",
-        message=chat_init.question,
-        msg_summary=chat_init.question
-    )
+    # await db.post_chat(
+    #     conversation_id=chat_init.conversation_id,
+    #     user_id=chat_init.user_id,
+    #     role="user",
+    #     message=chat_init.question,
+    #     msg_summary=chat_init.question
+    # )
     
-    chat_document = await db.post_chat(
+    # chat_document = await db.post_chat(
+    #     conversation_id=chat_init.conversation_id,
+    #     user_id=chat_init.user_id,
+    #     role="assistant",
+    #     message=assistant_response,
+    #     msg_summary=assistant_response
+    # )
+    
+    user_msg, ai_msg = await db.post_two_chats(
         conversation_id=chat_init.conversation_id,
-        user_id=chat_init.user_id,
-        role="assistant",
-        message=assistant_response,
-        msg_summary=assistant_response
+        first_user_id=chat_init.user_id,
+        first_role="user",
+        first_message=chat_init.question,
+        first_msg_summary=chat_init.question,
+        second_user_id=chat_init.user_id,
+        second_role="assistant",
+        second_message=assistant_response,
+        second_msg_summary=assistant_response
     )
     
     if chat_init.is_new:        
@@ -99,19 +111,19 @@ async def complete_query(chat_init: ChatRequest, llm: LLMInterface = Depends(get
         return NewConversationModel(conversation_id=chat_init.conversation_id, 
                                     user_id=chat_init.user_id,
                                     subject=chat_init.question,
-                                    created_at=chat_document.created_at,
-                                    updated_at=chat_document.updated_at,
+                                    created_at=user_msg.created_at,
+                                    updated_at=user_msg.updated_at,
                                     is_new=True,
                                     reply=ReplyModel(
-                                        id=chat_document.message_id,
+                                        id=ai_msg.message_id,
                                         content=assistant_response,
-                                        timestamp=chat_document.created_at
+                                        timestamp=ai_msg.created_at
                                     ))
         
     else:
         print("Continuing Conversation")                
-        return MessageModel(message_id=chat_document.message_id,
-                            conversation_id=chat_document.conversation_id,
-                            content=chat_document.message,
-                            timestamp=chat_document.created_at,
+        return MessageModel(message_id=ai_msg.message_id,
+                            conversation_id=ai_msg.conversation_id,
+                            content=ai_msg.message,
+                            timestamp=ai_msg.created_at,
                             is_new=False)

@@ -65,24 +65,133 @@ class MongoDB(DBInterface):
             created_at=current_timestamp,
             updated_at=current_timestamp
         )
-
-    def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
-        """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
+    
+    async def post_two_chats(self, 
+        conversation_id: str,
+        first_user_id: str,
+        first_role: str,
+        first_message: str,
+        first_msg_summary: str,
+        second_user_id: str,
+        second_role: str,
+        second_message: str,
+        second_msg_summary: str
+    ) -> tuple[ChatMessageModel, ChatMessageModel]:
+        """
+        Post two chat messages together to the database
+        
+        Args:
+            conversation_id: ID of the conversation for both messages
+            first_user_id: User ID for first message
+            first_role: Role for first message
+            first_message: Content of first message
+            first_msg_summary: Summary of first message
+            second_user_id: User ID for second message 
+            second_role: Role for second message
+            second_message: Content of second message
+            second_msg_summary: Summary of second message
+            
+        Returns:
+            Tuple of two ChatMessageModel objects for the created messages
+        """
         chats_collection = self.db["chats"]
+        current_timestamp = self._get_current_timestamp()        
+                
+        first_chat = {
+            "conversation_id": conversation_id,
+            "user_id": first_user_id,
+            "role": first_role,
+            "message": first_message,
+            "msg_summary": first_msg_summary,
+            "created_at": current_timestamp,
+            "updated_at": current_timestamp
+        }            
+        
+        second_chat = {
+            "conversation_id": conversation_id,
+            "user_id": second_user_id,
+            "role": second_role,
+            "message": second_message,
+            "msg_summary": second_msg_summary,
+            "created_at": current_timestamp,
+            "updated_at": current_timestamp
+        }
+                
+        result = chats_collection.insert_many([first_chat, second_chat])
+            
+        first_id, second_id = result.inserted_ids                
+                
+        first_model = ChatMessageModel(
+            message_id=str(first_id),
+            conversation_id=conversation_id,
+            user_id=first_user_id,
+            role=first_role,
+            message=first_message,
+            msg_summary=first_msg_summary,
+            created_at=current_timestamp,
+            updated_at=current_timestamp
+        )
+        
+        second_model = ChatMessageModel(
+            message_id=str(second_id),
+            conversation_id=conversation_id,
+            user_id=second_user_id,
+            role=second_role,
+            message=second_message,
+            msg_summary=second_msg_summary,
+            created_at=current_timestamp,
+            updated_at=current_timestamp
+        )
+        
+        return first_model, second_model
+
+
+    # def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
+    #     """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
+    #     chats_collection = self.db["chats"]
+    #     skip_count = (page_number - 1) * limit
+    #     chats = chats_collection.find({"conversation_id": conversation_id}).sort("timestamp", -1).skip(skip_count).limit(limit)
+    #     chat_list = []
+    #     for chat in chats:
+    #         chat_list.append(MessageModel(id=str(chat["_id"]), 
+    #                                       content=chat["message"], 
+    #                                       role=chat["role"],                                           
+    #                                       timestamp=chat["created_at"]))
+    #     total_pages, total_entries = self._get_total_page(conversation_id=conversation_id, page_size=limit)
+    #     return MessagesResponseModel(messages=chat_list, 
+    #                                  metadata=MetadataModel(total=total_entries, 
+    #                                                         page_number=page_number, 
+    #                                                         total_pages=total_pages, 
+    #                                                         page_size=limit))
+    def get_chat_by_page(self, conversation_id: str, page_number: int = None, limit: int = 10) -> MessagesResponseModel:
+        """Get the latest page of chat conversations and messages, sorted by the latest message's timestamp"""
+        chats_collection = self.db["chats"]
+        
+        # Calculate total pages and total entries
+        total_pages, total_entries = self._get_total_page(conversation_id=conversation_id, page_size=limit)
+        
+        # If page_number is not provided or is None, fetch the latest page
+        if page_number is None or page_number > total_pages:
+            page_number = total_pages
+        
+        # Calculate skip_count for pagination
         skip_count = (page_number - 1) * limit
-        chats = chats_collection.find({"conversation_id": conversation_id}).sort("timestamp", -1).skip(skip_count).limit(limit)
+        
+        # Fetch messages from the database
+        chats = chats_collection.find({"conversation_id": conversation_id}).sort([("created_at", -1), ("role", 1)]).skip(skip_count).limit(limit)
         chat_list = []
         for chat in chats:
             chat_list.append(MessageModel(id=str(chat["_id"]), 
-                                          content=chat["message"], 
-                                          role=chat["role"],                                           
-                                          timestamp=chat["created_at"]))
-        total_pages, total_entries = self._get_total_page(conversation_id=conversation_id, page_size=limit)
+                                        content=chat["message"], 
+                                        role=chat["role"],                                           
+                                        timestamp=chat["created_at"]))
+        
         return MessagesResponseModel(messages=chat_list, 
-                                     metadata=MetadataModel(total=total_entries, 
+                                    metadata=MetadataModel(total=total_entries, 
                                                             page_number=page_number, 
                                                             total_pages=total_pages, 
                                                             page_size=limit))
+
     
     def get_chat_context(self, conversation_id: str) -> List[Dict[str, Any]]:
         """Get the recent 6 chats for a given conversation id"""

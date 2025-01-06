@@ -31,7 +31,7 @@ def populate_collection(name, data_rows):
     
     return
     
-def get_data_rows():
+def get_data_rows(file_path : str):
     import csv
     from typing import List, Dict    
 
@@ -46,8 +46,9 @@ def get_data_rows():
         print(len(data_rows), " rows processed")
         return data_rows
     
-    csv_file_path = "/Users/codermehraj/Documents/codes/vivasoft/auto-query/pihr-autoquery/kb/PIHR_DATASET.csv"
-    data_rows = import_data_from_csv(csv_file_path)
+    # csv_file_path = "/Users/codermehraj/Documents/codes/vivasoft/auto-query/pihr-autoquery/kb/PIHR_DATASET.csv"
+    # csv_file_path = "kb/PIHR_DATASET.csv"
+    data_rows = import_data_from_csv(file_path)
     
     return data_rows
 

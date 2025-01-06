@@ -1,0 +1,10 @@
+kb/parsed
+kb/raw
+
+rss.txt
+
+*.env
+
+*.pem
+
+/venv

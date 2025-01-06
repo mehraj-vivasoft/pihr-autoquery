@@ -80,9 +80,9 @@ async def query(collection_name: str, query: str, db: WeviateDatabaseInistance =
     }
     
 @router.get("/seed")
-async def seed(db: WeviateDatabaseInistance = Depends(get_db_insance)):        
-    await run_seed()
+async def seed(file_path: str, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
+    run_seed(file_path=file_path)
         
     return {
-        "message": "Successfully Seeded RAG"
+        "message": f"Successfully Seeded RAG from {file_path}",
     }

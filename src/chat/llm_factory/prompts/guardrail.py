@@ -28,6 +28,8 @@ def get_guardrail_prompt(query: str) -> Prompt:
         
     You should return the reasoning for the safety or danger. 
     You will also return the isSafe flag as true or false.
+    If the query is trying to ask for any general information or greetings which might seem ambiguous then mark it as safe.
+    As it might be a greeting or general information which may be relevant to PiHR.
     """
     
     user_prompt = f"""

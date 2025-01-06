@@ -25,6 +25,39 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
+    async def post_two_chats(
+        self,
+        conversation_id: str,
+        first_user_id: str,
+        first_role: str,
+        first_message: str,
+        first_msg_summary: str,
+        second_user_id: str,
+        second_role: str,
+        second_message: str,
+        second_msg_summary: str
+    ) -> tuple[ChatMessageModel, ChatMessageModel]:
+        """
+        Post two chat messages together to the database
+        
+        Args:
+            conversation_id: ID of the conversation for both messages
+            first_user_id: User ID for first message
+            first_role: Role for first message
+            first_message: Content of first message
+            first_msg_summary: Summary of first message
+            second_user_id: User ID for second message
+            second_role: Role for second message
+            second_message: Content of second message
+            second_msg_summary: Summary of second message
+            
+        Returns:
+            tuple[ChatMessageModel, ChatMessageModel]: Tuple containing two ChatMessageModel 
+            objects representing the created messages
+        """
+        pass
+    
+    @abstractmethod
     def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
         """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
         pass
