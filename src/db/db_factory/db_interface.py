@@ -69,7 +69,7 @@ class DBInterface(ABC):
     
     # get all conversations of a user
     @abstractmethod
-    def get_all_conversations(self, user_id: str) -> AllConversationsResponseModel:
+    def get_all_conversations(self, user_id: str, page_number: int = 1, page_size: int = 10) -> AllConversationsResponseModel:
         """Get all conversations of a user"""
         pass
     

@@ -42,7 +42,17 @@ class MongoDB(DBInterface):
     async def post_chat(self, conversation_id: str, user_id: str, role: str, message: str, msg_summary: str) -> ChatMessageModel:
         """Post a chat message to the database"""      
         chats_collection = self.db["chats"]
+        conversations_collection = self.db["conversations"]
         current_timestamp = self._get_current_timestamp()
+        
+        if not conversations_collection.find_one({"id": conversation_id}):
+            self.create_conversation(conversation_id=conversation_id, subject=message, user_id=user_id)
+        else:
+            conversations_collection.update_one(
+                {"id": conversation_id},
+                {"$set": {"updated_at": current_timestamp}}
+            )
+        
         chat_document = {            
             "conversation_id": conversation_id,
             "user_id": user_id,
@@ -95,7 +105,16 @@ class MongoDB(DBInterface):
             Tuple of two ChatMessageModel objects for the created messages
         """
         chats_collection = self.db["chats"]
+        conversations_collection = self.db["conversations"]
         current_timestamp = self._get_current_timestamp()        
+        
+        if not conversations_collection.find_one({"id": conversation_id}):
+            self.create_conversation(conversation_id=conversation_id, subject=first_message, user_id=first_user_id)
+        else:
+            conversations_collection.update_one(
+                {"id": conversation_id},
+                {"$set": {"updated_at": current_timestamp}}
+            )
                 
         first_chat = {
             "conversation_id": conversation_id,
@@ -163,6 +182,7 @@ class MongoDB(DBInterface):
     #                                                         page_number=page_number, 
     #                                                         total_pages=total_pages, 
     #                                                         page_size=limit))
+    
     def get_chat_by_page(self, conversation_id: str, page_number: int = None, limit: int = 10) -> MessagesResponseModel:
         """Get the latest page of chat conversations and messages, sorted by the latest message's timestamp"""
         chats_collection = self.db["chats"]
@@ -204,7 +224,7 @@ class MongoDB(DBInterface):
         conversations_collection = self.db["conversations"]
         total_pages, total_entries = self._get_total_page_overall(user_id=user_id, page_size=page_size)
         skip_count = (page_number - 1) * page_size
-        conversations = conversations_collection.find({"user_id": user_id}).skip(skip_count).limit(page_size)
+        conversations = conversations_collection.find({"user_id": user_id}).sort("updated_at", -1).skip(skip_count).limit(page_size)
         response = []
         for conversation in conversations:
             response.append({

@@ -35,10 +35,10 @@ async def get_db() -> DBInterface:
 
 # Example API call: GET /conversations?user_id=<user_id>
 @router.get("/", response_model=Any)
-async def get_conversations(user_id: str, db: DBInterface = Depends(get_db)):
+async def get_conversations(user_id: str, page: int = 1, limit: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get all conversations for a user."""
     try:        
-        conversations = db.get_all_conversations(user_id)
+        conversations = db.get_all_conversations(user_id, page, limit)
         print(conversations)
         return conversations
     except Exception as e:
