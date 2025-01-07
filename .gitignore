@@ -8,3 +8,5 @@ rss.txt
 *.pem
 
 /venv
+
+*.DS_Store
