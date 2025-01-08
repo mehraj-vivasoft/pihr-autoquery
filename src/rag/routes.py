@@ -31,14 +31,22 @@ async def query(request: SimpleRagEntryRequest, db: WeviateDatabaseInistance = D
     }
     
 @router.get("/entries/{collection_name}")
-async def query(collection_name: str, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
+async def query(collection_name: str, limit: int = 10, page: int = 1, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
 
-    entries = db.get_all_chunks(collection_name)
+    entries = db.get_all_chunks(collection_name, limit, page)
         
     return {
         "message": f"Successfully Fetched {len(entries)} Entries from RAG",
         "entries": entries
     }
+
+@router.get("/entries/count/{collection_name}")
+async def query(collection_name: str, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
+
+    entries = db.get_number_of_chunks(collection_name)
+    print(entries)
+        
+    return entries
 
 @router.get("/entries/{collection_name}/{id}")
 async def query(collection_name: str, id: str, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
@@ -70,9 +78,9 @@ async def query(db: WeviateDatabaseInistance = Depends(get_db_insance)):
     }
 
 @router.get("/query/{collection_name}/{query}")
-async def query(collection_name: str, query: str, db: WeviateDatabaseInistance = Depends(get_db_insance)):        
+async def query(collection_name: str, query: str, topk: int = 3, db: WeviateDatabaseInistance = Depends(get_db_insance)):
 
-    entries = db.get_top_k_chunks(collection_name, query, 3)
+    entries = db.get_top_k_chunks(collection_name, query, topk, False)
         
     return {
         "message": f"Successfully Fetched {len(entries)} Entries from RAG",

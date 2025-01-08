@@ -784,3 +784,126 @@ Can PiHR's HR software be customized to fit my organization's specific needs? Ab
 "How does PiHR ensure the security of my employee data? Yes, we know how important it is to setup and run HR software smoothly. So we provide a free PiHR Setup and core HR data upload service alongside a range of cost-effective implementation services.",FAQ,"FAQ, Intro, Security"
 "Do you provide support? Yes, you can rely on our professional support team who will provide you with helpful support and training. Need any support? Call: +8809606881188",FAQ,"FAQ, Intro, Support"
 "Do you have mobile application for PiHR? Yes, PiHR offers mobile applications for both Android and IOS.",FAQ,"FAQ, Intro, Mobile"
+"### **1. Attendence Introduction**
+
+- **Title:** Operational Manual for Attendance Module
+- **Purpose:** Overview of attendance management features, functionalities, and configuration procedures.
+- **Sections Overview:**
+  - Dashboard
+  - Operation
+  - Rostering
+  - Reports
+  - Settings",user_manual,Attendence
+"### **2. Attendence Dashboard**
+
+- **Functionality Overview:**
+  - Review attendance statuses such as pending approvals, reconciliation, and missed attendance entries.
+  - Includes quick views like ""Last 30 Days Attendance Summary.""
+- **Key Features:**
+  1. Pending Attendance Approval
+  2. Pending Attendance Reconciliation
+  3. Attendance Missed Alerts
+  4. Summary View for Last 30 Days
+- **User Interactions:** Step-by-step guidance for using the dashboard tools for approvals and monitoring.",user_manual,Attendence
+"### **3. Attendence Operations**
+
+#### **3.1 Daily Attendance**
+
+- **Purpose:** Manage and edit employee attendance records (in-time and out-time).
+- **Steps:**
+  - Navigate to Attendance → Operation → Daily Attendance.
+  - View, edit, or delete attendance entries by employee and date.
+  - Save changes for updated records.
+- **Example Use Case:** Correcting attendance errors for a specific date.
+
+#### **3.2 Upload Attendance Data**
+
+- **Purpose:** Bulk attendance management via CSV upload.
+- **Steps:**
+  1. Download the template from the system.
+  2. Populate the data in the template file.
+  3. Upload the filled template back into the system.
+- **System Notes:** Default in/out times adhere to the predefined attendance policy.
+
+#### **3.3 Attendance Approval**
+
+- **Purpose:** Approve or reject attendance submitted via mobile app by employees working remotely.
+- **Actions:** Click ""Approve"" or ""Reject"" after reviewing the location and details.
+
+#### **3.4 OT (Overtime) Calculation**
+
+- **Functionality:** Calculate overtime based on two modes:
+  1. Employee-wise (for specific individuals).
+  2. Date-wise (for selected periods).
+- **Steps:**
+  - Filter and select desired parameters.
+  - Save selected records.",user_manual,Attendence
+"### **4. Attendence Rostering**
+
+#### **4.1 Shift Setup**
+
+- **Purpose:** Define work shifts for employees.
+- **Key Data:**
+  - Shift name, description, entry time, delay buffer, and working hours.
+  - Save to create shifts.
+
+#### **4.2 Roster Eligible**
+
+- **Functionality:** Assign employees to eligible rosters.
+- **Steps:**
+  - Search employees by branch or section.
+  - Select and save eligible employees.
+
+#### **4.3 Roster Setup**
+
+- **Purpose:** Allocate employees to shifts.
+- **Steps:**
+  - Assign shifts to employees and save.
+
+#### **4.4 Attendance Reconciliation**
+
+- **Purpose:** Modify attendance for rostered employees.
+- **Steps:** Edit and update attendance details using provided tools.",user_manual,Attendence
+"### **5. Attendence Reports**
+
+#### **5.1 Attendance Reports**
+
+- **Types:**
+  - Daily, Monthly, and Summary attendance reports.
+  - Job card, extra time, and reconciliation reports.
+  - Detailed analysis of employee attendance.
+- **Customization:** Filter by employee ID, date ranges, and additional parameters.
+
+#### **5.2 Overtime Reports**
+
+- **Focus:** Duration of employee overtime.
+- **Options:** Generate for all or specific employees.",user_manual,Attendence
+"### **6. Attendence Settings**
+
+#### **6.1 Attendance Policy**
+
+- **Setup:** Define office policies for attendance timings, working hours, delays, and weekly closures.
+
+#### **6.2 Policy Mapping**
+
+- **Purpose:** Map policies to employees by branch, department, or individually.
+
+#### **6.3 Holiday Setup**
+
+- **Functionality:** Configure public and branch-specific holidays.
+
+#### **6.4 Deduction Policies**
+
+- **Components:**
+  - Absent, Delay, Extreme Delay, Underwork, and Unpaid Leave policies.
+  - Define penalties and deduction rules for non-compliance.
+
+#### **6.5 Over Time Policy**
+
+- **Setup:** Determine overtime eligibility, payment ratios, and fixed pay options.
+
+#### **6.6 Bonus and Hotspot Settings**
+
+- **Attendance Bonus:** Reward employees for full attendance.
+- **Hotspot:** Define geofencing for attendance tracking.
+",user_manual,Attendence

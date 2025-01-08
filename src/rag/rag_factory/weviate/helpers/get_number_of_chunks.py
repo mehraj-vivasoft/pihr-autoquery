@@ -1,6 +1,6 @@
 from weaviate import WeaviateClient
 
-def get_chunks(collection_name: str, instance: WeaviateClient, limit: int = 10, page: int = 1):
+def get_chunks_count(collection_name: str, instance: WeaviateClient):
     """
     Retrieves all chunks from a given Weaviate collection.
 
@@ -12,6 +12,9 @@ def get_chunks(collection_name: str, instance: WeaviateClient, limit: int = 10, 
         List[Dict[str, str]]: A list of dictionaries, where each dictionary contains the properties of a single chunk.
     """
     collection = instance.collections.get(collection_name)
-    chunks = collection.query.fetch_objects(limit=limit, offset=(page-1)*limit).objects
+    # chunks_count = collection.query.fetch_objects().objects
+    chunks_count = sum(1 for _ in collection.iterator())    
     
-    return chunks
+    print("Chunks count: ", chunks_count)
+    
+    return chunks_count

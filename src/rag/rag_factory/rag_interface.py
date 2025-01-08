@@ -19,12 +19,17 @@ class RAGInterface(ABC):
         pass
     
     @abstractmethod
+    def add_PDF(self, collection: str, data: List[Any]) -> List[Any]:
+        """Post a document to the RAG"""
+        pass
+    
+    @abstractmethod
     def get_top_k_chunks(self, collection: str, query: str, top_k: int, is_simple: bool = False) -> List[Any]:
         """Get a response from the RAG"""
         pass
     
     @abstractmethod
-    def get_all_chunks(self, collection: str) -> List[Any]:
+    def get_all_chunks(self, collection: str, limit: int = 10, page: int = 1) -> List[Any]:
         """Get all responses from the RAG"""
         pass
     
@@ -41,6 +46,11 @@ class RAGInterface(ABC):
     @abstractmethod
     def delete_chunks_by_id(self, collection: str, ids: List[str]) -> List[Any]:
         """Delete chunks by id"""
+        pass
+    
+    @abstractmethod
+    def get_number_of_chunks(self, collection: str) -> Any:
+        """Get the chat context for a given conversation id"""
         pass
     
     
