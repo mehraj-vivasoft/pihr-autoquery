@@ -229,7 +229,7 @@ class MongoDB(DBInterface):
         for conversation in conversations:
             response.append({
                 "id": conversation["id"],
-                "employee_id": conversation["user_id"],
+                "user_id": conversation["user_id"],
                 "subject": conversation["subject"],
                 "created_at": conversation["created_at"],
                 "updated_at": conversation["updated_at"]

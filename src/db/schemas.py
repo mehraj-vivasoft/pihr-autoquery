@@ -25,7 +25,7 @@ class ChatMessageModel(BaseModel):
     
 class ConversationModel(BaseModel):
     id: str
-    employee_id: str
+    user_id: str
     subject: str
     created_at: datetime
     updated_at: datetime
