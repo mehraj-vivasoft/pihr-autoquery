@@ -5,8 +5,7 @@ from typing import Any
 from pydantic import BaseModel
 
 class AssistantResponse(BaseModel):
-    assistant_response: str
-    assistant_response_summary: str
+    assistant_response: str    
 
 class Prompt(BaseModel):
     system_prompt: str
@@ -26,15 +25,17 @@ def get_chat_prompt(query: str, rag_context: str) -> Prompt:
     Here is some background information related to the user query:
     Background Context: {rag_context}            
     
-    use the relevant information from the background context and ignore the irrelevant information from the background context to answer the user query.
-    If you cannot answer the user query based on the background context, you should tell the user that you cannot answer the user query.
+    use the relevant information from the background context, and ignore the irrelevant information in the background context to answer the user query.
+    If you cannot answer the user query based on the background context, you should tell the user that you cannot answer the user query. If the user asks 
+    for any irrelevant information, you should tell the user that you cannot answer the user query except for the information related to PiHR. You may do 
+    general information like greetings or general information which may be relevant to PiHR. Also if the user asks for any destructive actions like 
+    delete, update, edit, create etc. then you should tell the user that you are not authorized to do that action.
     
     Make sure that the response is not too long.
     
     Now you have to answer the user query based on the Background context and chat history.
     Response Format:
     - Assistant Response
-    - Assistant Response Summary
     """
     
     return Prompt(system_prompt=system_prompt, user_prompt=user_prompt)

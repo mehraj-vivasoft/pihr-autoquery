@@ -163,25 +163,6 @@ class MongoDB(DBInterface):
         )
         
         return first_model, second_model
-
-
-    # def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
-    #     """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
-    #     chats_collection = self.db["chats"]
-    #     skip_count = (page_number - 1) * limit
-    #     chats = chats_collection.find({"conversation_id": conversation_id}).sort("timestamp", -1).skip(skip_count).limit(limit)
-    #     chat_list = []
-    #     for chat in chats:
-    #         chat_list.append(MessageModel(id=str(chat["_id"]), 
-    #                                       content=chat["message"], 
-    #                                       role=chat["role"],                                           
-    #                                       timestamp=chat["created_at"]))
-    #     total_pages, total_entries = self._get_total_page(conversation_id=conversation_id, page_size=limit)
-    #     return MessagesResponseModel(messages=chat_list, 
-    #                                  metadata=MetadataModel(total=total_entries, 
-    #                                                         page_number=page_number, 
-    #                                                         total_pages=total_pages, 
-    #                                                         page_size=limit))
     
     def get_chat_by_page(self, conversation_id: str, page_number: int = None, limit: int = 10) -> MessagesResponseModel:
         """Get the latest page of chat conversations and messages, sorted by the latest message's timestamp"""

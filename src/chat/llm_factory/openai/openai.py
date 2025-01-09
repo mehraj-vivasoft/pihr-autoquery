@@ -18,7 +18,7 @@ class OpenAiLLM(LLMInterface):
         rag_instance = WeviateDatabaseInistance()
         
         rag_instance.connect()        
-        rag_context = rag_instance.get_top_k_chunks("PIHR_DATASET", query, 3, True)
+        rag_context = rag_instance.get_top_k_chunks("PIHR_DATASET", query, 3, True, 0.25)
         rag_instance.disconnect()
         
         rag_context = "\n".join(rag_context)

@@ -24,7 +24,7 @@ class RAGInterface(ABC):
         pass
     
     @abstractmethod
-    def get_top_k_chunks(self, collection: str, query: str, top_k: int, is_simple: bool = False) -> List[Any]:
+    def get_top_k_chunks(self, collection: str, query: str, top_k: int, is_simple: bool = False, max_distance: float = 1.0) -> List[Any]:
         """Get a response from the RAG"""
         pass
     

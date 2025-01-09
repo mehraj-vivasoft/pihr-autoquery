@@ -50,11 +50,11 @@ class WeviateDatabaseInistance(RAGInterface):
         post_chunk(collection, data, self.client)
         return
     
-    def get_top_k_chunks(self, collection: str, query: str, top_k: int, is_simple: bool = True) -> List[Dict[str, str]]:
+    def get_top_k_chunks(self, collection: str, query: str, top_k: int, is_simple: bool = True, max_distance: float = 1.0) -> List[Dict[str, str]]:
         """Get a response from the RAG"""
         if self.client is None:
             raise Exception("Weaviate is not running")
-        return get_top_k_chunks(collection, query, self.client, top_k, is_simple)
+        return get_top_k_chunks(collection, query, self.client, top_k, is_simple, max_distance)
     
     def get_all_chunks(self, collection: str, limit: int = 10, page: int = 1) -> List[Dict[str, str]]:
         """Get all responses from the RAG"""
