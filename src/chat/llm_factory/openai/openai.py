@@ -15,6 +15,9 @@ class OpenAiLLM(LLMInterface):
 
     async def generate_response(self, query: str, user_id: str, conversation_id: str) -> str:
         
+        if len(query) > 1200:
+            return "Sorry, your question is too long. Please ask a shorter question."
+        
         rag_instance = WeviateDatabaseInistance()
         
         rag_instance.connect()        
@@ -27,6 +30,7 @@ class OpenAiLLM(LLMInterface):
 
         completion = self.client.beta.chat.completions.parse(
             model="gpt-4o-mini",
+            max_tokens=400,
             messages=[
                 {"role": "system", "content": prompt.system_prompt},
                 # conversation history to be added
