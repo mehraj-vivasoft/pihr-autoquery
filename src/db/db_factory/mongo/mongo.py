@@ -76,13 +76,15 @@ class MongoDB(DBInterface):
             updated_at=current_timestamp
         )
     
-    async def post_two_chats(self, 
+    def post_two_chats(self, 
         conversation_id: str,
         first_user_id: str,
+        first_msg_id: str,
         first_role: str,
         first_message: str,
         first_msg_summary: str,
         second_user_id: str,
+        second_msg_id: str,
         second_role: str,
         second_message: str,
         second_msg_summary: str
@@ -106,7 +108,7 @@ class MongoDB(DBInterface):
         """
         chats_collection = self.db["chats"]
         conversations_collection = self.db["conversations"]
-        current_timestamp = self._get_current_timestamp()        
+        current_timestamp = self._get_current_timestamp()
         
         if not conversations_collection.find_one({"id": conversation_id}):            
             self.create_conversation(conversation_id=conversation_id, subject=first_message, user_id=first_user_id)
@@ -117,6 +119,7 @@ class MongoDB(DBInterface):
             )
                 
         first_chat = {
+            "message_id": first_msg_id,
             "conversation_id": conversation_id,
             "user_id": first_user_id,
             "role": first_role,
@@ -127,6 +130,7 @@ class MongoDB(DBInterface):
         }            
         
         second_chat = {
+            "message_id": second_msg_id,
             "conversation_id": conversation_id,
             "user_id": second_user_id,
             "role": second_role,
@@ -138,10 +142,10 @@ class MongoDB(DBInterface):
                 
         result = chats_collection.insert_many([first_chat, second_chat])
             
-        first_id, second_id = result.inserted_ids                
+        # first_id, second_id = result.inserted_ids
                 
         first_model = ChatMessageModel(
-            message_id=str(first_id),
+            message_id=first_msg_id,
             conversation_id=conversation_id,
             user_id=first_user_id,
             role=first_role,
@@ -152,7 +156,7 @@ class MongoDB(DBInterface):
         )
         
         second_model = ChatMessageModel(
-            message_id=str(second_id),
+            message_id=second_msg_id,
             conversation_id=conversation_id,
             user_id=second_user_id,
             role=second_role,
@@ -182,7 +186,7 @@ class MongoDB(DBInterface):
         chats = chats_collection.find({"conversation_id": conversation_id}).sort([("created_at", -1), ("role", 1)]).skip(skip_count).limit(limit)
         chat_list = []
         for chat in chats:
-            chat_list.append(MessageModel(id=str(chat["_id"]), 
+            chat_list.append(MessageModel(id=str(chat["message_id"]), 
                                         content=chat["message"], 
                                         role=chat["role"],                                           
                                         timestamp=chat["created_at"]))

@@ -28,11 +28,13 @@ class DBInterface(ABC):
     async def post_two_chats(
         self,
         conversation_id: str,
+        first_msg_id: str,
         first_user_id: str,
         first_role: str,
         first_message: str,
         first_msg_summary: str,
         second_user_id: str,
+        second_msg_id: str,
         second_role: str,
         second_message: str,
         second_msg_summary: str
