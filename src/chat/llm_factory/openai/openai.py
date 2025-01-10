@@ -13,10 +13,10 @@ class OpenAiLLM(LLMInterface):
         self.api_key = api_key
         self.client = OpenAI(api_key=self.api_key)
 
-    async def generate_response(self, query: str, user_id: str, conversation_id: str) -> str:
+    async def generate_response(self, query: str, user_id: str, conversation_id: str) -> tuple[str, int, int]:
         
         if len(query) > 1200:
-            return "Sorry, your question is too long. Please ask a shorter question."
+            return "Sorry, your question is too long. Please ask a shorter question.", 0, 0
         
         rag_instance = WeviateDatabaseInistance()
         
@@ -39,12 +39,15 @@ class OpenAiLLM(LLMInterface):
             response_format= AssistantResponse
         )
         
+        input_token = completion.usage.prompt_tokens
+        output_token = completion.usage.completion_tokens      
+        
         response = completion.choices[0].message.parsed
                         
         if response.assistant_response is None:
-            return "Sorry, I could not find an answer to your question."
+            return "Sorry, I could not find an answer to your question.", 0, 0
         
-        return response.assistant_response
+        return response.assistant_response, input_token, output_token
     
     async def check_validation(self, query: str) -> GurdrailResponse:
         

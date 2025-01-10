@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 from src.db.db_factory.db_interface import DBInterface
 from src.db.db_factory.mongo.mongo import MongoDB
-from src.db.schemas import ChatPost, ChatQuery
+from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling
 
 # Initialize FastAPI router
 router = APIRouter()
@@ -35,10 +35,10 @@ async def get_db() -> DBInterface:
 
 # Example API call: GET /conversations?user_id=<user_id>
 @router.get("/", response_model=Any)
-async def get_conversations(user_id: str, page: int = 1, limit: int = 10, db: DBInterface = Depends(get_db)):
+async def get_conversations(user_id: str, page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get all conversations for a user."""
     try:        
-        conversations = db.get_all_conversations(user_id, page, limit)
+        conversations = db.get_all_conversations(user_id, page_number, page_size)
         print(conversations)
         return conversations
     except Exception as e:
@@ -46,10 +46,10 @@ async def get_conversations(user_id: str, page: int = 1, limit: int = 10, db: DB
     
 # Example API call: GET /<conversation_id>?page=<page>&limit=<limit>
 @router.get("/{conversation_id}", response_model=Any)
-async def get_chats(conversation_id: str, page: int = 1, limit: int = 10, db: DBInterface = Depends(get_db)):
+async def get_chats(conversation_id: str, page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get chats by page."""
     try:        
-        chats = db.get_chat_by_page(conversation_id, page, limit)
+        chats = db.get_chat_by_page(conversation_id, page_number, page_size)
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
@@ -78,3 +78,13 @@ async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_d
         return context
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chat context: {e}")
+    
+
+@router.get("/billing/{user_id}", response_model=List[MonthlyBilling])
+async def get_billing_by_user(user_id: str, db: DBInterface = Depends(get_db)):
+    """Endpoint to get the monthly billing for a user."""
+    try:
+        billing = db.get_billing_by_user(user_id)
+        return billing
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")

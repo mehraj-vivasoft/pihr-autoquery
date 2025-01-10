@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
-from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MessagesResponseModel
+from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MessagesResponseModel, MonthlyBilling
 
 class DBInterface(ABC):
     
@@ -37,7 +37,9 @@ class DBInterface(ABC):
         second_msg_id: str,
         second_role: str,
         second_message: str,
-        second_msg_summary: str
+        second_msg_summary: str,
+        input_token: int = 0,
+        output_token: int = 0
     ) -> tuple[ChatMessageModel, ChatMessageModel]:
         """
         Post two chat messages together to the database
@@ -75,3 +77,7 @@ class DBInterface(ABC):
         """Get all conversations of a user"""
         pass
     
+    @abstractmethod
+    def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
+        """Get a conversation by its ID"""
+        pass

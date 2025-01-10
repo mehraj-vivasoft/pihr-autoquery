@@ -53,7 +53,7 @@ async def get_db() -> DBInterface:
         if db_instance:
             db_instance.disconnect()
 
-async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, current_timestamp: str):
+async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, current_timestamp: str, input_token: int = 0, output_token: int = 0):
     
     db = MongoDB(uri="mongodb://admin:kothinAdminPass@mongodb:27017", db_name="chat_db")
     db.connect()
@@ -97,7 +97,9 @@ async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, 
             second_msg_id=chat_init.user_id + current_timestamp + "ai",
             second_role="assistant",
             second_message=assistant_response,
-            second_msg_summary=assistant_response
+            second_msg_summary=assistant_response,
+            input_token=input_token,
+            output_token=output_token
         )
         
         print("Chat pair posted in the background")
@@ -126,13 +128,13 @@ async def complete_query(chat_init: ChatRequest, background_tasks: BackgroundTas
     # else:        
     #     assistant_response = validation_chk.reasoning_for_safety_or_danger
     
-    assistant_response = await llm.generate_response(
+    assistant_response, input_token, output_token = await llm.generate_response(
             query=chat_init.question, user_id=chat_init.user_id, conversation_id=chat_init.conversation_id
         )
     
     current_timestamp = datetime.now().isoformat() + "Z"
     
-    background_tasks.add_task(post_chat_pair_in_bg, chat_init, assistant_response, current_timestamp)
+    background_tasks.add_task(post_chat_pair_in_bg, chat_init, assistant_response, current_timestamp, input_token, output_token)
     
     if chat_init.is_new:
         print("responded")

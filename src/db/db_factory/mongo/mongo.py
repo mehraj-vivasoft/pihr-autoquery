@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from typing import List, Any, Dict
 from src.db.db_factory.db_interface import DBInterface
 from datetime import datetime
-from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MetadataModel, MessageModel, MessagesResponseModel
+from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MetadataModel, MessageModel, MessagesResponseModel, MonthlyBilling
 
 class MongoDB(DBInterface):
     def __init__(self, uri: str, db_name: str):
@@ -87,7 +87,9 @@ class MongoDB(DBInterface):
         second_msg_id: str,
         second_role: str,
         second_message: str,
-        second_msg_summary: str
+        second_msg_summary: str,
+        input_token: int = 0,
+        output_token: int = 0
     ) -> tuple[ChatMessageModel, ChatMessageModel]:
         """
         Post two chat messages together to the database
@@ -126,7 +128,9 @@ class MongoDB(DBInterface):
             "message": first_message,
             "msg_summary": first_msg_summary,
             "created_at": current_timestamp,
-            "updated_at": current_timestamp
+            "updated_at": current_timestamp,
+            "input_token": 0,
+            "output_token": 0
         }            
         
         second_chat = {
@@ -137,7 +141,9 @@ class MongoDB(DBInterface):
             "message": second_message,
             "msg_summary": second_msg_summary,
             "created_at": current_timestamp,
-            "updated_at": current_timestamp
+            "updated_at": current_timestamp,
+            "input_token": input_token,
+            "output_token": output_token
         }
                 
         result = chats_collection.insert_many([first_chat, second_chat])
@@ -225,6 +231,59 @@ class MongoDB(DBInterface):
                                                                     page_number=page_number, 
                                                                     total_pages=total_pages, 
                                                                     page_size=page_size))
+    
+    def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
+        """
+        Calculate the monthly billing for a given user_id.
+
+        Args:
+            user_id (str): The user_id to filter the records.
+            config (MongoDBConfig): Configuration for MongoDB.
+            input_rate (float): Billing rate per input token.
+            output_rate (float): Billing rate per output token.
+
+        Returns:
+            List[MonthlyBilling]: A list of monthly billing details.
+        """
+        chats_collection = self.db["chats"]
+        
+        pipeline = [
+            {"$match": {"user_id": user_id}},
+            {
+                "$group": {
+                    "_id": {
+                        "year": {"$year": {"$toDate": "$created_at"}},
+                        "month": {"$month": {"$toDate": "$created_at"}}
+                    },
+                    "total_input_tokens": {"$sum": "$input_token"},
+                    "total_output_tokens": {"$sum": "$output_token"},
+                }
+            },
+            {
+                "$sort": {"_id.year": 1, "_id.month": 1}
+            }
+        ]
+        
+        result = list(chats_collection.aggregate(pipeline))
+        
+        billing_details = []
+        for record in result:
+            year = record["_id"]["year"]
+            month = record["_id"]["month"]
+            total_input_tokens = record["total_input_tokens"]
+            total_output_tokens = record["total_output_tokens"]
+
+            billing_amount = (total_input_tokens * 0.018) + (total_output_tokens * 0.072)
+            billing_amount = billing_amount / 1000
+
+            billing_details.append(MonthlyBilling(
+                month=f"{year}-{month:02d}",
+                total_input_tokens=total_input_tokens,
+                total_output_tokens=total_output_tokens,
+                billing_amount=billing_amount
+            ))
+
+        return billing_details
     
     def _get_total_page(self, conversation_id: str, page_size: int) -> (int, int):
         """Get total number of page of a conversation id"""

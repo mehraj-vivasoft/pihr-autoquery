@@ -6,7 +6,7 @@ class LLMInterface(ABC):
     
     # generate response from user query, user_id, conversation_id
     @abstractmethod
-    async def generate_response(self, query: str, user_id: str, conversation_id: str) -> str:
+    async def generate_response(self, query: str, user_id: str, conversation_id: str) -> tuple[str, int, int]:
         pass
 
     # check if the query is valid

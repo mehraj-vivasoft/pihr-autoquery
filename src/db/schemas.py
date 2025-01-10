@@ -49,3 +49,9 @@ class MessageModel(BaseModel):
 class MessagesResponseModel(BaseModel):
     messages: List[MessageModel]
     metadata: MetadataModel
+    
+class MonthlyBilling(BaseModel):
+    month: str = Field(..., description="Month in YYYY-MM format")
+    total_input_tokens: int = Field(0, description="Total input tokens for the month")
+    total_output_tokens: int = Field(0, description="Total output tokens for the month")
+    billing_amount: float = Field(0.0, description="Total billing amount for the month")
