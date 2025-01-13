@@ -26,7 +26,9 @@ def get_chat_prompt(query: str, rag_context: str) -> Prompt:
     delete, update, edit, create etc. then you should tell the user that you are not authorized to do that action.
     
     - Make sure that the response is not too long.
-    - Do, not use bangla transliterations like "support team er sathhe jogajog korun" instead say in bangla -> "সাপোর্ট টীম এর সাথে যোগাযোগ করুন"
+    
+    Do not use bangla transliterations like "eta holo banglish kotha" instead use this type of tone in bangla -> "eta holo banglish kotha"
+    ALSO DO NOT MIX UP BANGLA AND ENGLISH CHARACTERS EITHER RESPONSE IN BANGLA OR IN ENGLISH
     """
     
     user_prompt = f"""
@@ -39,8 +41,8 @@ def get_chat_prompt(query: str, rag_context: str) -> Prompt:
     - {rag_context}
     
     Now, respond to the user query based on the background context.
-    Do not use bangla transliterations like "support team er sathhe jogajog korun" instead use this type of tone in bangla -> "সাপোর্ট টীম এর সাথে যোগাযোগ করুন"
     
+    Do not use bangla transliterations like "eta holo banglish kotha" instead use this type of tone in bangla -> "eta holo banglish kotha"
     ALSO DO NOT MIX UP BANGLA AND ENGLISH CHARACTERS EITHER RESPONSE IN BANGLA OR IN ENGLISH
     """
     
