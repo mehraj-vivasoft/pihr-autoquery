@@ -39,7 +39,9 @@ def get_chat_prompt(query: str, rag_context: str) -> Prompt:
     - {rag_context}
     
     Now, respond to the user query based on the background context.
-    Make sure not to use bangla transliterations like "support team er sathhe jogajog korun" instead use this tone in bangla -> "সাপোর্ট টীম এর সাথে যোগাযোগ করুন"
+    Do not use bangla transliterations like "support team er sathhe jogajog korun" instead use this type of tone in bangla -> "সাপোর্ট টীম এর সাথে যোগাযোগ করুন"
+    
+    ALSO DO NOT MIX UP BANGLA AND ENGLISH CHARACTERS EITHER RESPONSE IN BANGLA OR IN ENGLISH
     """
     
     return Prompt(system_prompt=system_prompt, user_prompt=user_prompt)

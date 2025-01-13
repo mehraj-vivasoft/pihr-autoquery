@@ -9,7 +9,6 @@ from src.rag.routes import router as rag_router
 from src.chat.routes import router as chat_router
 from src.db.routes import router as db_router
 
-
 version = "v1"
 
 app = FastAPI()

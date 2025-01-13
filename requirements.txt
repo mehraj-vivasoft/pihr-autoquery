@@ -10,3 +10,4 @@ weaviate
 weaviate-client
 pymongo
 gunicorn
+google-genai
