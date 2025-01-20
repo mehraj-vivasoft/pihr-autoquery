@@ -46,4 +46,4 @@ async def root():
 app.include_router(rag_router, prefix=f"/api/{version}/rag", tags=['rag'])
 app.include_router(db_router, prefix=f"/api/{version}/conversations", tags=['conversations'])
 app.include_router(chat_router, prefix=f"/api/{version}/chats", tags=['chat'])
-app.include_router(message_router, prefix=f"/api/{version}/message", tags=['message'])
+app.include_router(message_router, prefix=f"/api/{version}/messages", tags=['message'])

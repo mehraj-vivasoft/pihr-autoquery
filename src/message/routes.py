@@ -35,20 +35,26 @@ async def get_db() -> DBInterface:
 
 
 
+class FeedbackModel(BaseModel):
+    is_liked: bool
+
 @router.post("/{message_id}/feedback", response_model=Any)
-async def post_feedback(message_id: str, is_liked: bool, db: DBInterface = Depends(get_db)):
+async def post_feedback(message_id: str, feedback: FeedbackModel, db: DBInterface = Depends(get_db)):
     """Endpoint to post feedback."""
     try:        
-        chats = db.post_feedback(message_id, is_liked)
+        chats = db.post_feedback(message_id, feedback.is_liked)
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to post feedback: {e}")
     
+class RatingModel(BaseModel):
+    rating: int
+
 @router.post("/{message_id}/rating", response_model=Any)
-async def post_rating(message_id: str, rating: int, db: DBInterface = Depends(get_db)):
+async def post_rating(message_id: str, rating: RatingModel, db: DBInterface = Depends(get_db)):
     """Endpoint to post rating."""
     try:
-        chats = db.post_rating(message_id, rating)
+        chats = db.post_rating(message_id, rating.rating)
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to post rating: {e}")
