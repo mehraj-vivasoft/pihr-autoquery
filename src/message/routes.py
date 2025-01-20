@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 from src.db.db_factory.db_interface import DBInterface
 from src.db.db_factory.mongo.mongo import MongoDB
-from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling
+from src.message.schemas import FeedbackModel, RatingModel
 
 # Initialize FastAPI router
 router = APIRouter()
@@ -31,12 +31,8 @@ async def get_db() -> DBInterface:
         )
     finally:
         if db_instance:
-            db_instance.disconnect()      
+            db_instance.disconnect()
 
-
-
-class FeedbackModel(BaseModel):
-    is_liked: bool
 
 @router.post("/{message_id}/feedback", response_model=Any)
 async def post_feedback(message_id: str, feedback: FeedbackModel, db: DBInterface = Depends(get_db)):
@@ -47,8 +43,6 @@ async def post_feedback(message_id: str, feedback: FeedbackModel, db: DBInterfac
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to post feedback: {e}")
     
-class RatingModel(BaseModel):
-    rating: int
 
 @router.post("/{message_id}/rating", response_model=Any)
 async def post_rating(message_id: str, rating: RatingModel, db: DBInterface = Depends(get_db)):

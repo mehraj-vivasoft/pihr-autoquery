@@ -60,3 +60,6 @@ class MonthlyBilling(BaseModel):
 class FeedbacksResponseModel(BaseModel):
     feedbacks: List[Dict[str, Any]]
     metadata: MetadataModel
+    
+class TitleChangeRequest(BaseModel):    
+    title: str

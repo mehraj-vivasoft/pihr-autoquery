@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 from src.db.db_factory.db_interface import DBInterface
 from src.db.db_factory.mongo.mongo import MongoDB
-from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling
+from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling, TitleChangeRequest
 
 # Initialize FastAPI router
 router = APIRouter()
@@ -60,6 +60,15 @@ async def delete_chats(conversation_id: str, db: DBInterface = Depends(get_db)):
     """Endpoint to get chats by page."""
     try:        
         chats = db.delete_chat_by_conversation_id(conversation_id)
+        return chats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
+
+@router.patch("/{conversation_id}", response_model=Any)
+async def update_chat(conversation_id: str, title_change_req: TitleChangeRequest, db: DBInterface = Depends(get_db)):
+    """Endpoint to get chats by page."""
+    try:        
+        chats = db.update_conversation_subject(conversation_id, title_change_req.title)
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")

@@ -98,3 +98,8 @@ class DBInterface(ABC):
     def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
         """Get a conversation by its ID"""
         pass
+    
+    @abstractmethod
+    def update_conversation_subject(self, conversation_id: str, subject: str) -> None:
+        """Update the subject of a conversation"""
+        pass

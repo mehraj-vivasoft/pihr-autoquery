@@ -275,7 +275,11 @@ class MongoDB(DBInterface):
                 
         feedback_collection.update_one({"message_id": message_id}, {"$set": {"rating": rating}})
         return {"message": "Rating updated successfully"}        
-        
+    
+    def update_conversation_subject(self, conversation_id: str, subject: str) -> None:
+        conversations_collection = self.db["conversations"]
+        conversations_collection.update_one({"id": conversation_id}, {"$set": {"subject": subject}})
+        return {"message": "Conversation subject updated successfully"}
 
     def get_all_feedbacks(self, page_number: int = 1, page_size: int = 10) -> FeedbacksResponseModel:
         feedback_collection = self.db["feedbacks"]
