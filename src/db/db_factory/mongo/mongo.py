@@ -2,7 +2,9 @@ from pymongo import MongoClient
 from typing import List, Any, Dict
 from src.db.db_factory.db_interface import DBInterface
 from datetime import datetime
-from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MetadataModel, MessageModel, MessagesResponseModel, MonthlyBilling
+from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MetadataModel, MessageModel, MessagesResponseModel, MonthlyBilling, FeedbacksResponseModel
+from fastapi import HTTPException            
+    
 
 class MongoDB(DBInterface):
     def __init__(self, uri: str, db_name: str):
@@ -203,6 +205,15 @@ class MongoDB(DBInterface):
                                                             total_pages=total_pages, 
                                                             page_size=limit))
 
+    def delete_chat_by_conversation_id(self, conversation_id: str):
+        """Delete a conversation by its ID"""
+        try:
+            self.db["chats"].delete_many({"conversation_id": conversation_id})
+            self.db["conversations"].delete_one({"id": conversation_id})
+            print(f"Conversation {conversation_id} deleted.")
+            return {"message": "Chats deleted successfully"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to delete conversation: {e}")
     
     def get_chat_context(self, conversation_id: str) -> List[Dict[str, Any]]:
         """Get the recent 6 chats for a given conversation id"""
@@ -231,6 +242,63 @@ class MongoDB(DBInterface):
                                                                     page_number=page_number, 
                                                                     total_pages=total_pages, 
                                                                     page_size=page_size))
+    
+    def post_feedback(self, message_id: str, is_like: bool) -> None:
+        feedback_collection = self.db["feedbacks"]
+        message_collection = self.db["chats"]
+        current_timestamp = self._get_current_timestamp()
+        the_message = message_collection.find_one({"message_id": message_id})
+        message_timestamp = the_message["created_at"]
+        conversation_id = the_message["conversation_id"]
+        if not message_timestamp:
+            raise HTTPException(status_code=404, detail="Message not found")
+        if not conversation_id:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+        # get ai and user message
+        message_pair = message_collection.find({"created_at": message_timestamp, "conversation_id": conversation_id})
+        for message in message_pair:
+            if message["role"] == "user":
+                user_message = message["message"]
+            if message["role"] == "assistant":
+                ai_message = message["message"]
+        # insert feedback        
+        feedback_collection.insert_one({"message_id": message_id, "is_like": is_like, "created_at": current_timestamp, "rating": -1,
+                                        "conversation_id": conversation_id, "user_message": user_message, "ai_message": ai_message})
+        
+        return {"message": "Feedback posted successfully"}
+    
+    def post_rating(self, message_id: str, rating: int) -> None:
+        feedback_collection = self.db["feedbacks"]
+        feedback_entry = feedback_collection.find_one({"message_id": message_id})
+        if not feedback_entry:
+            raise HTTPException(status_code=404, detail="Feedback not found")
+                
+        feedback_collection.update_one({"message_id": message_id}, {"$set": {"rating": rating}})
+        return {"message": "Rating updated successfully"}        
+        
+
+    def get_all_feedbacks(self, page_number: int = 1, page_size: int = 10) -> FeedbacksResponseModel:
+        feedback_collection = self.db["feedbacks"]
+        total_pages, total_entries = self._get_total_feedback_page_overall(page_size=page_size)
+        skip_count = (page_number - 1) * page_size
+        feedbacks = feedback_collection.find().sort("created_at", -1).skip(skip_count).limit(page_size)
+        response = []
+        for feedback in feedbacks:
+            response.append({
+                "id": feedback["message_id"],
+                "is_like": feedback["is_like"],      
+                "rating": feedback["rating"],         
+                "created_at": feedback["created_at"],
+                "conversation_id": feedback["conversation_id"],
+                "user_message": feedback["user_message"],
+                "ai_message": feedback["ai_message"]
+            })                
+        
+        return FeedbacksResponseModel(feedbacks=response, 
+                                      metadata=MetadataModel(total=total_entries, 
+                                                             page_number=page_number, 
+                                                             total_pages=total_pages,
+                                                             page_size=page_size))
     
     def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
         """
@@ -295,6 +363,12 @@ class MongoDB(DBInterface):
         """Get total number of page of a conversation id"""
         conversations_collection = self.db["conversations"]
         total_count = conversations_collection.count_documents({"user_id": user_id})
+        return ((total_count + page_size - 1) // page_size, total_count)
+
+    def _get_total_feedback_page_overall(self, page_size: int) -> (int, int):
+        """Get total number of page of a conversation id"""
+        feedbacks_collections = self.db["feedbacks"]
+        total_count = feedbacks_collections.count_documents({})
         return ((total_count + page_size - 1) // page_size, total_count)
 
     def _get_current_timestamp(self) -> str:

@@ -53,6 +53,16 @@ async def get_chats(conversation_id: str, page_number: int = 1, page_size: int =
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
+    
+# Example API call: DELETE /<conversation_id>?page=<page>&limit=<limit>
+@router.delete("/{conversation_id}", response_model=Any)
+async def delete_chats(conversation_id: str, db: DBInterface = Depends(get_db)):
+    """Endpoint to get chats by page."""
+    try:        
+        chats = db.delete_chat_by_conversation_id(conversation_id)
+        return chats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
 
 # Example API call: POST /chats
 @router.post("/chats", response_model=dict)

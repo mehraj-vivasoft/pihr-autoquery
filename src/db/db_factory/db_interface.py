@@ -25,6 +25,18 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
+    async def post_feedback(self, message_id: str, is_like: bool) -> None:
+        pass
+    
+    @abstractmethod
+    async def post_rating(self, message_id: str, rating: int) -> None:
+        pass
+    
+    @abstractmethod
+    def get_all_feedbacks(self, page_number: int = 1, page_size: int = 10) -> Any:
+        pass
+    
+    @abstractmethod
     async def post_two_chats(
         self,
         conversation_id: str,
@@ -64,6 +76,11 @@ class DBInterface(ABC):
     @abstractmethod
     def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
         """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
+        pass
+    
+    @abstractmethod
+    def delete_chat_by_conversation_id(self, conversation_id: str):
+        """Delete a conversation by its ID"""
         pass
     
     @abstractmethod

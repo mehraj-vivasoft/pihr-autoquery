@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 class ChatPost(BaseModel):
     conversation_id: str
@@ -55,3 +55,8 @@ class MonthlyBilling(BaseModel):
     total_input_tokens: int = Field(0, description="Total input tokens for the month")
     total_output_tokens: int = Field(0, description="Total output tokens for the month")
     billing_amount: float = Field(0.0, description="Total billing amount for the month")
+    
+
+class FeedbacksResponseModel(BaseModel):
+    feedbacks: List[Dict[str, Any]]
+    metadata: MetadataModel
