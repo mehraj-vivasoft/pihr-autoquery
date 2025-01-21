@@ -54,10 +54,10 @@ async def post_rating(message_id: str, rating: RatingModel, db: DBInterface = De
         raise HTTPException(status_code=500, detail=f"Failed to post rating: {e}")
 
 @router.get("/feedbacks", response_model=Any)
-async def get_feedbacks(db: DBInterface = Depends(get_db)):
+async def get_feedbacks(is_liked: bool = False, page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get feedbacks."""
     try:        
-        chats = db.get_all_feedbacks()
+        chats = db.get_all_feedbacks(is_liked, page_number, page_size)
         return chats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch feedbacks: {e}")

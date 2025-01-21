@@ -33,7 +33,7 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
-    def get_all_feedbacks(self, page_number: int = 1, page_size: int = 10) -> Any:
+    def get_all_feedbacks(self, is_liked: bool = False, page_number: int = 1, page_size: int = 10) -> Any:
         pass
     
     @abstractmethod

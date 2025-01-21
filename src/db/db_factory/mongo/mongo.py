@@ -281,11 +281,11 @@ class MongoDB(DBInterface):
         conversations_collection.update_one({"id": conversation_id}, {"$set": {"subject": subject}})
         return {"message": "Conversation subject updated successfully"}
 
-    def get_all_feedbacks(self, page_number: int = 1, page_size: int = 10) -> FeedbacksResponseModel:
+    def get_all_feedbacks(self, is_liked: bool = False, page_number: int = 1, page_size: int = 10) -> FeedbacksResponseModel:
         feedback_collection = self.db["feedbacks"]
-        total_pages, total_entries = self._get_total_feedback_page_overall(page_size=page_size)
+        total_pages, total_entries = self._get_total_feedback_page_overall(page_size=page_size, is_liked=is_liked)
         skip_count = (page_number - 1) * page_size
-        feedbacks = feedback_collection.find().sort("created_at", -1).skip(skip_count).limit(page_size)
+        feedbacks = feedback_collection.find({"is_like": is_liked}).sort("created_at", -1).skip(skip_count).limit(page_size)
         response = []
         for feedback in feedbacks:
             response.append({
@@ -369,10 +369,10 @@ class MongoDB(DBInterface):
         total_count = conversations_collection.count_documents({"user_id": user_id})
         return ((total_count + page_size - 1) // page_size, total_count)
 
-    def _get_total_feedback_page_overall(self, page_size: int) -> (int, int):
+    def _get_total_feedback_page_overall(self, page_size: int, is_liked: bool = False) -> (int, int):
         """Get total number of page of a conversation id"""
         feedbacks_collections = self.db["feedbacks"]
-        total_count = feedbacks_collections.count_documents({})
+        total_count = feedbacks_collections.count_documents({"is_like": is_liked})
         return ((total_count + page_size - 1) // page_size, total_count)
 
     def _get_current_timestamp(self) -> str:
