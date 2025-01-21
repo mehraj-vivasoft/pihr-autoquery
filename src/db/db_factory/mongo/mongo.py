@@ -250,6 +250,7 @@ class MongoDB(DBInterface):
         the_message = message_collection.find_one({"message_id": message_id})
         message_timestamp = the_message["created_at"]
         conversation_id = the_message["conversation_id"]
+        user_id = the_message["user_id"]
         if not message_timestamp:
             raise HTTPException(status_code=404, detail="Message not found")
         if not conversation_id:
@@ -263,7 +264,7 @@ class MongoDB(DBInterface):
                 ai_message = message["message"]
         # insert feedback        
         feedback_collection.insert_one({"message_id": message_id, "is_like": is_like, "created_at": current_timestamp, "rating": -1,
-                                        "conversation_id": conversation_id, "user_message": user_message, "ai_message": ai_message})
+                                        "user_id": user_id, "conversation_id": conversation_id, "user_message": user_message, "ai_message": ai_message})
         
         return {"message": "Feedback posted successfully"}
     
@@ -291,9 +292,10 @@ class MongoDB(DBInterface):
             response.append({
                 "id": feedback["message_id"],
                 "is_like": feedback["is_like"],      
-                "rating": feedback["rating"],         
+                "rating": feedback["rating"],
                 "created_at": feedback["created_at"],
                 "conversation_id": feedback["conversation_id"],
+                "user_id": feedback["user_id"],
                 "user_message": feedback["user_message"],
                 "ai_message": feedback["ai_message"]
             })                
