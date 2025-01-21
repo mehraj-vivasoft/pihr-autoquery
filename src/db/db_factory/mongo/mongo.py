@@ -287,8 +287,11 @@ class MongoDB(DBInterface):
         total_pages, total_entries = self._get_total_feedback_page_overall(page_size=page_size, is_liked=is_liked)
         skip_count = (page_number - 1) * page_size
         feedbacks = feedback_collection.find({"is_like": is_liked}).sort("created_at", -1).skip(skip_count).limit(page_size)
-        response = []
+        response = []                
+        
         for feedback in feedbacks:
+            if "user_id" not in feedback:
+                feedback["user_id"] = -1
             response.append({
                 "id": feedback["message_id"],
                 "is_like": feedback["is_like"],      
