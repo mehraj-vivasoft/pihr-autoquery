@@ -3,8 +3,21 @@ from typing import List, Any, Dict
 from src.db.db_factory.db_interface import DBInterface
 from datetime import datetime
 from src.db.schemas import ChatMessageModel, AllConversationsResponseModel, MetadataModel, MessageModel, MessagesResponseModel, MonthlyBilling, FeedbacksResponseModel
-from fastapi import HTTPException            
-    
+from fastapi import HTTPException
+from datetime import datetime
+
+def parse_date(date: str):
+    formats = [
+        "%d-%m-%Y",  # Day-Month-Year
+        "%Y-%m-%dT%H:%M:%S.%fZ",  # ISO 8601 with microseconds and UTC (Z)
+        "%Y-%m-%dT%H:%M:%S.%f",  # ISO 8601 without timezone
+    ]
+    for fmt in formats:
+        try:
+            return datetime.strptime(date, fmt)
+        except ValueError:
+            continue
+    raise ValueError(f"Invalid date format. Supported formats: {formats}")
 
 class MongoDB(DBInterface):
     def __init__(self, uri: str, db_name: str):
@@ -35,6 +48,7 @@ class MongoDB(DBInterface):
                 "id": conversation_id,
                 "subject": subject,
                 "user_id": user_id,
+                "company_id": conversation_id.split("_")[0],
                 "created_at": current_timestamp,
                 "updated_at": current_timestamp
             }
@@ -126,6 +140,7 @@ class MongoDB(DBInterface):
             "message_id": first_msg_id,
             "conversation_id": conversation_id,
             "user_id": first_user_id,
+            "company_id": conversation_id.split("_")[0],
             "role": first_role,
             "message": first_message,
             "msg_summary": first_msg_summary,
@@ -139,6 +154,7 @@ class MongoDB(DBInterface):
             "message_id": second_msg_id,
             "conversation_id": conversation_id,
             "user_id": second_user_id,
+            "company_id": conversation_id.split("_")[0],
             "role": second_role,
             "message": second_message,
             "msg_summary": second_msg_summary,
@@ -174,7 +190,114 @@ class MongoDB(DBInterface):
             updated_at=current_timestamp
         )
         
-        return first_model, second_model
+        self.update_billing(date=current_timestamp, company_id=conversation_id.split("_")[0], input_token=input_token, output_token=output_token)
+        
+        return first_model, second_model      
+    
+    def update_billing(self, date: str, company_id: str, input_token: int, output_token: int) -> Any:    
+        billing_collection = self.db["billing"]
+        
+        try:
+            date_obj = parse_date(date)
+        except ValueError as e:
+            return {"error": f"Invalid date format. Details: {e}"}
+
+        cost = (input_token * 0.0182 + output_token * 0.0727) / 1000
+
+        def update_frequency(frequency: str, date: str) -> None:
+            billing_collection.update_one(
+                {"frequency": frequency, "date": date, "company_id": company_id},
+                {
+                    "$inc": {
+                        "input_token": input_token,
+                        "output_token": output_token,
+                        "cost": cost,
+                    },
+                },
+                upsert=True,  # Create the document if it doesn't exist
+            )
+
+        # Daily billing
+        daily_date = date_obj.strftime("%d-%m-%Y")
+        update_frequency("daily", daily_date)
+
+        # Monthly billing
+        monthly_date = date_obj.strftime("%m-%Y")
+        update_frequency("monthly", monthly_date)
+
+        # Yearly billing
+        yearly_date = date_obj.strftime("%Y")
+        update_frequency("yearly", yearly_date)
+
+        return {"message": "Billing updated successfully"}
+    
+    def get_overall_billing(self, date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10):
+        billing_collection = self.db["billing"]
+
+        # Parse dates if provided
+        query = {"frequency": frequency}
+
+        if date_from:
+            try:
+                date_from_obj = parse_date(date_from)
+                query["date"] = {"$gte": date_from_obj.strftime("%d-%m-%Y")}
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_from format. Details: {e}")
+
+        if date_to:
+            try:
+                date_to_obj = parse_date(date_to)
+                query["date"] = query.get("date", {})
+                query["date"].update({"$lte": date_to_obj.strftime("%d-%m-%Y")})
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_to format. Details: {e}")
+
+        # Pagination logic
+        skip = (page_number - 1) * page_size
+        limit = page_size
+
+        # Fetch data from MongoDB
+        cursor = billing_collection.find(query).skip(skip).limit(limit)
+        billing_data = list(cursor)
+
+        # Calculate totals
+        total_cost = 0
+        total_input_tokens = 0
+        total_output_tokens = 0
+        formatted_data = []
+
+        for record in billing_data:
+            total_cost += record["cost"]
+            total_input_tokens += record["input_token"]
+            total_output_tokens += record["output_token"]
+
+            formatted_data.append({ 
+                "title": record["date"],
+                "total_input_tokens": record["input_token"],
+                "total_output_tokens": record["output_token"],
+                "billing_amount": record["cost"],
+            })
+
+        # Get the total count of documents for metadata
+        total_count = billing_collection.count_documents(query)
+        total_pages = (total_count + page_size - 1) // page_size
+
+        # Prepare the response
+        response = {
+            "total_cost": total_cost,
+            "total_input_tokens": total_input_tokens,
+            "total_output_tokens": total_output_tokens,
+            "frequency": frequency,
+            "data": formatted_data,
+            "metadata": {
+                "total": total_count,
+                "page_number": page_number,
+                "total_pages": total_pages,
+                "page_size": page_size,
+            },
+        }
+
+        return response         
     
     def get_chat_by_page(self, conversation_id: str, page_number: int = None, limit: int = 10) -> MessagesResponseModel:
         """Get the latest page of chat conversations and messages, sorted by the latest message's timestamp"""
@@ -294,7 +417,7 @@ class MongoDB(DBInterface):
                 feedback["user_id"] = -1
             response.append({
                 "id": feedback["message_id"],
-                "is_like": feedback["is_like"],      
+                "is_like": feedback["is_like"],
                 "rating": feedback["rating"],
                 "created_at": feedback["created_at"],
                 "conversation_id": feedback["conversation_id"],
@@ -308,6 +431,20 @@ class MongoDB(DBInterface):
                                                              page_number=page_number, 
                                                              total_pages=total_pages,
                                                              page_size=page_size))
+        
+    def count_feedbacks(self) -> Any:
+        messages_collections = self.db["chats"]
+        total_messages = messages_collections.count_documents({}) / 2
+        
+        feedback_collection = self.db["feedbacks"]
+        positive_feedback = feedback_collection.count_documents({"is_like": True})
+        negative_feedback = feedback_collection.count_documents({"is_like": False})
+        
+        return {
+            "total_messages": total_messages,
+            "positive_feedback": positive_feedback,
+            "negative_feedback": negative_feedback
+        }
     
     def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
         """
@@ -378,7 +515,7 @@ class MongoDB(DBInterface):
         """Get total number of page of a conversation id"""
         feedbacks_collections = self.db["feedbacks"]
         total_count = feedbacks_collections.count_documents({"is_like": is_liked})
-        return ((total_count + page_size - 1) // page_size, total_count)
+        return ((total_count + page_size - 1) // page_size, total_count)    
 
     def _get_current_timestamp(self) -> str:
         """Helper method to get the current timestamp in ISO format with Z"""
@@ -394,3 +531,5 @@ class MongoDB(DBInterface):
 # context = mongo.get_chat_context("conversation123")
 # print(context)
 # mongo.disconnect()
+
+

@@ -54,7 +54,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
-      - mynetwork  
+      - mynetwork
 
 volumes:
   weaviate_data:

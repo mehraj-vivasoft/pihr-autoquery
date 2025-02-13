@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 from src.db.db_factory.db_interface import DBInterface
 from src.db.db_factory.mongo.mongo import MongoDB
-from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling, TitleChangeRequest
+from src.db.schemas import ChatPost, ChatQuery, MonthlyBilling, TitleChangeRequest, OverallBillingResponse
 
 # Initialize FastAPI router
 router = APIRouter()
@@ -98,6 +98,22 @@ async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chat context: {e}")
     
+@router.get("/stats/feedbacks", response_model=Any)
+async def get_feedback_stats(db: DBInterface = Depends(get_db)):
+    try:
+        stats = db.count_feedbacks()
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch feedback stats: {e}")
+
+@router.get("/stats/billing/overall", response_model=OverallBillingResponse)
+async def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
+    """Endpoint to get the overall billing."""
+    try:
+        billing = db.get_overall_billing(date_from, date_to, frequency, page_number, page_size)
+        return OverallBillingResponse(**billing)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
 
 @router.get("/billing/{user_id}", response_model=List[MonthlyBilling])
 async def get_billing_by_user(user_id: str, db: DBInterface = Depends(get_db)):

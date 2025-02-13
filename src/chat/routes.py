@@ -71,12 +71,12 @@ async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, 
         one, two = db.post_two_chats(
             conversation_id=chat_init.conversation_id,
             first_user_id=chat_init.user_id,
-            first_msg_id=chat_init.user_id + current_timestamp + "usr",
+            first_msg_id=chat_init.user_id + "_" + current_timestamp + "usr",
             first_role="user",
             first_message=chat_init.question,
             first_msg_summary=chat_init.question,
             second_user_id=chat_init.user_id,
-            second_msg_id=chat_init.user_id + current_timestamp + "ai",
+            second_msg_id=chat_init.user_id + "_" + current_timestamp + "ai",
             second_role="assistant",
             second_message=assistant_response,
             second_msg_summary=assistant_response
@@ -103,6 +103,8 @@ async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, 
         )
         
         print("Chat pair posted in the background")
+    
+    
     
     db.disconnect()
 

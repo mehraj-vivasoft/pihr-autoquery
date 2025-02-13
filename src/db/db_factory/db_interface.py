@@ -37,6 +37,10 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
+    def count_feedbacks(self) -> Any:
+        pass
+    
+    @abstractmethod
     async def post_two_chats(
         self,
         conversation_id: str,
@@ -74,6 +78,14 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
+    def update_billing(self, date: str, company_id: str, input_token: int, output_token: int) -> Any:
+        pass
+    
+    @abstractmethod
+    def get_overall_billing(self, date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10):
+        pass
+    
+    @abstractmethod
     def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
         """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
         pass
@@ -97,6 +109,11 @@ class DBInterface(ABC):
     @abstractmethod
     def get_billing_by_user(self, user_id: str) -> List[MonthlyBilling]:
         """Get a conversation by its ID"""
+        pass
+    
+    @abstractmethod
+    def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10):
+        """Get the overall billing."""
         pass
     
     @abstractmethod

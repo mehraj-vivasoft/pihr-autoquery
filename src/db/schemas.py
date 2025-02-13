@@ -63,3 +63,25 @@ class FeedbacksResponseModel(BaseModel):
     
 class TitleChangeRequest(BaseModel):    
     title: str
+    
+class DataItem(BaseModel):
+    title: str
+    total_input_tokens: int
+    total_output_tokens: int
+    billing_amount: float
+
+
+class Metadata(BaseModel):
+    total: int
+    page_number: int
+    total_pages: int
+    page_size: int
+
+
+class OverallBillingResponse(BaseModel):
+    total_cost: float
+    total_input_tokens: int
+    total_output_tokens: int
+    frequency: str
+    data: List[DataItem]
+    metadata: Metadata
