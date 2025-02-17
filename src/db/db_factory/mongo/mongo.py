@@ -299,6 +299,74 @@ class MongoDB(DBInterface):
 
         return response         
     
+    def get_billing_by_company_id(self, date_from: str = None, date_to: str = None, frequency: str = "daily", company_id: str = "", page_number: int = 1, page_size: int = 10):
+        billing_collection = self.db["billing"]
+
+        # Parse dates if provided
+        query = {"frequency": frequency, "company_id": company_id}
+
+        if date_from:
+            try:
+                date_from_obj = parse_date(date_from)
+                query["date"] = {"$gte": date_from_obj.strftime("%d-%m-%Y")}
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_from format. Details: {e}")
+
+        if date_to:
+            try:
+                date_to_obj = parse_date(date_to)
+                query["date"] = query.get("date", {})
+                query["date"].update({"$lte": date_to_obj.strftime("%d-%m-%Y")})
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_to format. Details: {e}")
+
+        # Pagination logic
+        skip = (page_number - 1) * page_size
+        limit = page_size
+
+        # Fetch data from MongoDB
+        cursor = billing_collection.find(query).skip(skip).limit(limit)
+        billing_data = list(cursor)
+
+        # Calculate totals
+        total_cost = 0
+        total_input_tokens = 0
+        total_output_tokens = 0
+        formatted_data = []
+
+        for record in billing_data:
+            total_cost += record["cost"]
+            total_input_tokens += record["input_token"]
+            total_output_tokens += record["output_token"]
+
+            formatted_data.append({ 
+                "title": record["date"],
+                "total_input_tokens": record["input_token"],
+                "total_output_tokens": record["output_token"],
+                "billing_amount": record["cost"],
+            })
+
+        # Get the total count of documents for metadata
+        total_count = billing_collection.count_documents(query)
+        total_pages = (total_count + page_size - 1) // page_size
+
+        # Prepare the response
+        response = {
+            "total_cost": total_cost,
+            "total_input_tokens": total_input_tokens,
+            "total_output_tokens": total_output_tokens,
+            "frequency": frequency,
+            "data": formatted_data,
+            "metadata": {
+                "total": total_count,
+                "page_number": page_number,
+                "total_pages": total_pages,
+                "page_size": page_size,
+            },
+        }
+
+        return response 
+    
     def get_chat_by_page(self, conversation_id: str, page_number: int = None, limit: int = 10) -> MessagesResponseModel:
         """Get the latest page of chat conversations and messages, sorted by the latest message's timestamp"""
         chats_collection = self.db["chats"]

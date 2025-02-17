@@ -86,6 +86,10 @@ class DBInterface(ABC):
         pass
     
     @abstractmethod
+    def get_billing_by_company_id(self, date_from: str = None, date_to: str = None, frequency: str = "daily", company_id: str = "", page_number: int = 1, page_size: int = 10):
+        pass
+    
+    @abstractmethod
     def get_chat_by_page(self, conversation_id: str, page_number: int, limit: int) -> MessagesResponseModel:
         """Get a list of chat conversations and messages, sorted by the latest message's timestamp"""
         pass
