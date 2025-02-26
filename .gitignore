@@ -9,4 +9,6 @@ rss.txt
 
 /venv
 
+*.pyc
+
 *.DS_Store

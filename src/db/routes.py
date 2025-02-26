@@ -98,7 +98,7 @@ async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chat context: {e}")
     
-@router.get("/stats/feedbacks", response_model=Any)
+@router.get("/feedbacks", response_model=Any)
 async def get_feedback_stats(db: DBInterface = Depends(get_db)):
     try:
         stats = db.count_feedbacks()
@@ -106,7 +106,7 @@ async def get_feedback_stats(db: DBInterface = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch feedback stats: {e}")
 
-@router.get("/stats/billing/overall", response_model=OverallBillingResponse)
+@router.get("/billing/overall", response_model=OverallBillingResponse)
 async def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get the overall billing."""
     try:
@@ -115,7 +115,7 @@ async def get_overall_billing(date_from: str = None, date_to: str = None, freque
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
 
-@router.get("/stats/billing/overall/company", response_model=Any)
+@router.get("/billing/company-wise", response_model=Any)
 async def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get the overall billing."""
     try:
@@ -124,7 +124,7 @@ async def get_overall_billing(date_from: str = None, date_to: str = None, freque
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
 
-@router.get("/stats/billing/company/{company_id}", response_model=OverallBillingResponse)
+@router.get("/billing/company/{company_id}", response_model=OverallBillingResponse)
 async def get_overall_billing(company_id: str, date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
     """Endpoint to get the overall billing."""
     try:
@@ -133,7 +133,7 @@ async def get_overall_billing(company_id: str, date_from: str = None, date_to: s
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")    
 
-@router.get("/billing/{user_id}", response_model=List[MonthlyBilling])
+@router.get("/billing/user/{user_id}", response_model=List[MonthlyBilling])
 async def get_billing_by_user(user_id: str, db: DBInterface = Depends(get_db)):
     """Endpoint to get the monthly billing for a user."""
     try:
