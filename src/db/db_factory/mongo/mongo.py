@@ -310,8 +310,86 @@ class MongoDB(DBInterface):
         }
 
         return response
-         
     
+    def get_overall_billing_by_company(self, date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10):
+        billing_collection = self.db["billing"]
+
+        # Parse date filters
+        match_query = {"frequency": frequency}
+
+        if date_from:
+            try:
+                date_from_obj = parse_date(date_from)
+                match_query["date"] = {"$gte": date_from_obj.strftime("%d-%m-%Y")}
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_from format. Details: {e}")
+
+        if date_to:
+            try:
+                date_to_obj = parse_date(date_to)
+                match_query["date"] = match_query.get("date", {})
+                match_query["date"].update({"$lte": date_to_obj.strftime("%d-%m-%Y")})
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid date_to format. Details: {e}")
+
+        # MongoDB Aggregation Pipeline
+        pipeline = [
+            {"$match": match_query},
+            {"$group": {
+                "_id": "$company_id",
+                "total_cost": {"$sum": "$cost"},
+                "total_input_tokens": {"$sum": "$input_token"},
+                "total_output_tokens": {"$sum": "$output_token"}
+            }},
+            {"$sort": {"total_cost": -1}},  # Sort by highest billing amount
+            {"$skip": (page_number - 1) * page_size},
+            {"$limit": page_size}
+        ]
+
+        # Fetch data from MongoDB
+        billing_data = list(billing_collection.aggregate(pipeline))
+
+        # Calculate overall totals
+        total_cost = sum(record["total_cost"] for record in billing_data)
+        total_input_tokens = sum(record["total_input_tokens"] for record in billing_data)
+        total_output_tokens = sum(record["total_output_tokens"] for record in billing_data)
+
+        # Format response
+        formatted_data = [
+            {
+                "company_id": record["_id"],
+                "total_input_tokens": record["total_input_tokens"],
+                "total_output_tokens": record["total_output_tokens"],
+                "billing_amount": record["total_cost"],
+            }
+            for record in billing_data
+        ]
+
+        # Get the total count of unique companies
+        total_count = billing_collection.distinct("company_id", match_query)
+        total_count = len(total_count)
+        total_pages = (total_count + page_size - 1) // page_size
+        avg_tokens = total_input_tokens / total_count if total_count > 0 else 0
+        avg_cost = total_cost / total_count if total_count > 0 else 0
+
+        # Prepare the response
+        response = {
+            "total_cost": total_cost,
+            "total_input_tokens": total_input_tokens,
+            "total_output_tokens": total_output_tokens,
+            "avg_tokens": avg_tokens,
+            "avg_cost": avg_cost,
+            "data": formatted_data,
+            "metadata": {
+                "total": total_count,
+                "page_number": page_number,
+                "total_pages": total_pages,
+                "page_size": page_size,
+            },
+        }
+
+        return response
+         
     def get_billing_by_company_id(self, date_from: str = None, date_to: str = None, frequency: str = "daily", company_id: str = "", page_number: int = 1, page_size: int = 10):
         billing_collection = self.db["billing"]
 
