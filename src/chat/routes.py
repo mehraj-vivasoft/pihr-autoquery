@@ -79,7 +79,9 @@ async def post_chat_pair_in_bg(chat_init: ChatRequest, assistant_response: str, 
             second_msg_id=chat_init.user_id + "_" + current_timestamp + "ai",
             second_role="assistant",
             second_message=assistant_response,
-            second_msg_summary=assistant_response
+            second_msg_summary=assistant_response,
+            input_token=input_token,
+            output_token=output_token
         )
         
         print("Chat pair posted in the background")
@@ -135,6 +137,9 @@ async def complete_query(chat_init: ChatRequest, background_tasks: BackgroundTas
         )
     
     current_timestamp = datetime.now().isoformat() + "Z"
+    
+    print("input token : " + str(input_token))
+    print("output token : " + str(output_token))
     
     background_tasks.add_task(post_chat_pair_in_bg, chat_init, assistant_response, current_timestamp, input_token, output_token)
     

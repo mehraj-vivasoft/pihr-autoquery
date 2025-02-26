@@ -124,3 +124,8 @@ class DBInterface(ABC):
     def update_conversation_subject(self, conversation_id: str, subject: str) -> None:
         """Update the subject of a conversation"""
         pass
+    
+    @abstractmethod
+    def post_file(self, file_name: str, user_id: str = -1, company_id: str  = -1) -> None:
+        """Post a file to the database"""
+        pass

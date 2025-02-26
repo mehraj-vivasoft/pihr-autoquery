@@ -9,6 +9,7 @@ from src.rag.routes import router as rag_router
 from src.chat.routes import router as chat_router
 from src.db.routes import router as db_router
 from src.message.routes import router as message_router
+from src.kb.routes import router as kb_router
 
 version = "v1"
 
@@ -47,3 +48,4 @@ app.include_router(rag_router, prefix=f"/api/{version}/rag", tags=['rag'])
 app.include_router(db_router, prefix=f"/api/{version}/conversations", tags=['conversations'])
 app.include_router(chat_router, prefix=f"/api/{version}/chats", tags=['chat'])
 app.include_router(message_router, prefix=f"/api/{version}/messages", tags=['message'])
+app.include_router(kb_router, prefix=f"/api/{version}/kb", tags=['kb'])

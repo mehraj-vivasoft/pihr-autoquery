@@ -11,3 +11,8 @@ weaviate-client
 pymongo
 gunicorn
 google-genai
+langchain
+langchain_community
+pypdf
+langchain_experimental
+langchain_openai

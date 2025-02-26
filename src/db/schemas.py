@@ -82,6 +82,8 @@ class OverallBillingResponse(BaseModel):
     total_cost: float
     total_input_tokens: int
     total_output_tokens: int
+    avg_tokens: float
+    avg_cost: float
     frequency: str
     data: List[DataItem]
     metadata: Metadata

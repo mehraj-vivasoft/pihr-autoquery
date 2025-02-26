@@ -39,6 +39,8 @@ class OpenAiLLM(LLMInterface):
             response_format= AssistantResponse
         )
         
+        print(completion)
+        
         input_token = completion.usage.prompt_tokens
         output_token = completion.usage.completion_tokens      
         

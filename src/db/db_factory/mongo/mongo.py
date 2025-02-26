@@ -235,58 +235,70 @@ class MongoDB(DBInterface):
         billing_collection = self.db["billing"]
 
         # Parse dates if provided
-        query = {"frequency": frequency}
+        match_query = {"frequency": frequency}
 
         if date_from:
             try:
                 date_from_obj = parse_date(date_from)
-                query["date"] = {"$gte": date_from_obj.strftime("%d-%m-%Y")}
+                match_query["date"] = {"$gte": date_from_obj.strftime("%d-%m-%Y")}
             except ValueError as e:
                 raise HTTPException(status_code=400, detail=f"Invalid date_from format. Details: {e}")
 
         if date_to:
             try:
                 date_to_obj = parse_date(date_to)
-                query["date"] = query.get("date", {})
-                query["date"].update({"$lte": date_to_obj.strftime("%d-%m-%Y")})
+                match_query["date"] = match_query.get("date", {})
+                match_query["date"].update({"$lte": date_to_obj.strftime("%d-%m-%Y")})
             except ValueError as e:
                 raise HTTPException(status_code=400, detail=f"Invalid date_to format. Details: {e}")
 
-        # Pagination logic
-        skip = (page_number - 1) * page_size
-        limit = page_size
+        # MongoDB Aggregation Pipeline
+        pipeline = [
+            {"$match": match_query},
+            {"$group": {
+                "_id": "$date",
+                "total_cost": {"$sum": "$cost"},
+                "total_input_tokens": {"$sum": "$input_token"},
+                "total_output_tokens": {"$sum": "$output_token"}
+            }},
+            {"$sort": {"_id": 1}},  # Sort by date in ascending order
+            {"$skip": (page_number - 1) * page_size},
+            {"$limit": page_size}
+        ]
 
         # Fetch data from MongoDB
-        cursor = billing_collection.find(query).skip(skip).limit(limit)
-        billing_data = list(cursor)
+        billing_data = list(billing_collection.aggregate(pipeline))
 
-        # Calculate totals
-        total_cost = 0
-        total_input_tokens = 0
-        total_output_tokens = 0
-        formatted_data = []
+        # Calculate overall totals
+        total_cost = sum(record["total_cost"] for record in billing_data)
+        total_input_tokens = sum(record["total_input_tokens"] for record in billing_data)
+        total_output_tokens = sum(record["total_output_tokens"] for record in billing_data)
 
-        for record in billing_data:
-            total_cost += record["cost"]
-            total_input_tokens += record["input_token"]
-            total_output_tokens += record["output_token"]
+        # Format response
+        formatted_data = [
+            {
+                "title": record["_id"],
+                "total_input_tokens": record["total_input_tokens"],
+                "total_output_tokens": record["total_output_tokens"],
+                "billing_amount": record["total_cost"],
+            }
+            for record in billing_data
+        ]
 
-            formatted_data.append({ 
-                "title": record["date"],
-                "total_input_tokens": record["input_token"],
-                "total_output_tokens": record["output_token"],
-                "billing_amount": record["cost"],
-            })
-
-        # Get the total count of documents for metadata
-        total_count = billing_collection.count_documents(query)
+        # Get the total count of unique dates
+        total_count = billing_collection.distinct("date", match_query)
+        total_count = len(total_count)
         total_pages = (total_count + page_size - 1) // page_size
+        avg_tokens = total_input_tokens / total_count if total_count > 0 else 0
+        avg_cost = total_cost / total_count if total_count > 0 else 0
 
         # Prepare the response
         response = {
             "total_cost": total_cost,
             "total_input_tokens": total_input_tokens,
             "total_output_tokens": total_output_tokens,
+            "avg_tokens": avg_tokens,
+            "avg_cost": avg_cost,
             "frequency": frequency,
             "data": formatted_data,
             "metadata": {
@@ -297,7 +309,8 @@ class MongoDB(DBInterface):
             },
         }
 
-        return response         
+        return response
+         
     
     def get_billing_by_company_id(self, date_from: str = None, date_to: str = None, frequency: str = "daily", company_id: str = "", page_number: int = 1, page_size: int = 10):
         billing_collection = self.db["billing"]
@@ -349,12 +362,16 @@ class MongoDB(DBInterface):
         # Get the total count of documents for metadata
         total_count = billing_collection.count_documents(query)
         total_pages = (total_count + page_size - 1) // page_size
+        avg_tokens = total_input_tokens / total_count
+        avg_cost = total_cost / total_count
 
         # Prepare the response
         response = {
             "total_cost": total_cost,
             "total_input_tokens": total_input_tokens,
             "total_output_tokens": total_output_tokens,
+            "avg_tokens": avg_tokens,
+            "avg_cost": avg_cost,
             "frequency": frequency,
             "data": formatted_data,
             "metadata": {
@@ -566,6 +583,16 @@ class MongoDB(DBInterface):
             ))
 
         return billing_details
+    
+    def post_file(self, file_name: str, user_id: str = -1, company_id: str  = -1) -> None:
+        """Post a file to the database"""
+        files_collection = self.db["files"]
+        files_collection.insert_one({
+            "file_name": file_name,
+            "user_id": str(user_id),
+            "company_id": str(company_id),
+            "created_at": datetime.now()
+        })
     
     def _get_total_page(self, conversation_id: str, page_size: int) -> (int, int):
         """Get total number of page of a conversation id"""
