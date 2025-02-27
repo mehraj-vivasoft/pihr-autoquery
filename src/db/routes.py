@@ -98,10 +98,10 @@ async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch chat context: {e}")
     
-@router.get("/feedbacks", response_model=Any)
+@router.get("/stats/feedbacks", response_model=Any)
 async def get_feedback_stats(db: DBInterface = Depends(get_db)):
-    try:
-        stats = db.count_feedbacks()
+    try:        
+        stats = db.count_feedbacks()        
         return stats
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch feedback stats: {e}")
