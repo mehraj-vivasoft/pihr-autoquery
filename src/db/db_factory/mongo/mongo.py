@@ -315,7 +315,7 @@ class MongoDB(DBInterface):
         billing_collection = self.db["billing"]
 
         # Parse date filters
-        match_query = {"frequency": frequency}
+        match_query = {"frequency": frequency, "company_id": {"$ne": ""}}
 
         if date_from:
             try:
