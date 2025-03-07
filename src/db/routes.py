@@ -17,6 +17,7 @@ async def get_db() -> DBInterface:
         db_instance.connect()
         
         if db_instance.db is None:
+            print("Database connection not available")            
             raise HTTPException(
                 status_code=503, 
                 detail="Database connection not available"
@@ -25,9 +26,10 @@ async def get_db() -> DBInterface:
         yield db_instance
         
     except Exception as e:
+        print(f"Database connection error: {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail=f"Database connection error: {str(e)}"
+            detail=f"Something went wrong"
         )
     finally:
         if db_instance:
@@ -42,7 +44,8 @@ async def get_conversations(user_id: str, page_number: int = 1, page_size: int =
         print(conversations)
         return conversations
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch conversations: {e}")
+        print(f"Failed to fetch conversations: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch conversations")
     
 # Example API call: GET /<conversation_id>?page=<page>&limit=<limit>
 @router.get("/{conversation_id}", response_model=Any)
@@ -52,7 +55,8 @@ async def get_chats(conversation_id: str, page_number: int = 1, page_size: int =
         chats = db.get_chat_by_page(conversation_id, page_number, page_size)
         return chats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
+        print(f"Failed to fetch chats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch chats")
     
 # Example API call: DELETE /<conversation_id>?page=<page>&limit=<limit>
 @router.delete("/{conversation_id}", response_model=Any)
@@ -62,7 +66,8 @@ async def delete_chats(conversation_id: str, db: DBInterface = Depends(get_db)):
         chats = db.delete_chat_by_conversation_id(conversation_id)
         return chats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
+        print(f"Failed to delete chats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete chats")
 
 @router.patch("/{conversation_id}", response_model=Any)
 async def update_chat(conversation_id: str, title_change_req: TitleChangeRequest, db: DBInterface = Depends(get_db)):
@@ -71,7 +76,8 @@ async def update_chat(conversation_id: str, title_change_req: TitleChangeRequest
         chats = db.update_conversation_subject(conversation_id, title_change_req.title)
         return chats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch chats: {e}")
+        print(f"Failed to update chat: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to update chat")
 
 # Example API call: POST /chats
 @router.post("/chats", response_model=dict)
@@ -87,7 +93,8 @@ async def post_chat(chat: ChatPost, db: DBInterface = Depends(get_db)):
         )
         return {"message": "Chat posted successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to post chat: {e}")
+        print(f"Failed to post chat: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to post chat")
 
 @router.get("/chat-context", response_model=List[Dict[str, Any]])
 async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_db)):
@@ -96,7 +103,8 @@ async def get_chat_context(conversation_id: str, db: DBInterface = Depends(get_d
         context = db.get_chat_context(conversation_id)
         return context
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch chat context: {e}")
+        print(f"Failed to fetch chat context: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch chat context")
     
 @router.get("/stats/feedbacks", response_model=Any)
 async def get_feedback_stats(db: DBInterface = Depends(get_db)):
@@ -104,7 +112,8 @@ async def get_feedback_stats(db: DBInterface = Depends(get_db)):
         stats = db.count_feedbacks()        
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch feedback stats: {e}")
+        print(f"Failed to fetch feedback stats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch feedback stats")
 
 @router.get("/billing/overall", response_model=OverallBillingResponse)
 async def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
@@ -113,7 +122,8 @@ async def get_overall_billing(date_from: str = None, date_to: str = None, freque
         billing = db.get_overall_billing(date_from, date_to, frequency, page_number, page_size)
         return OverallBillingResponse(**billing)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
+        print(f"Failed to fetch billing: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing")
 
 @router.get("/billing/company-wise", response_model=Any)
 async def get_overall_billing(date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
@@ -122,7 +132,8 @@ async def get_overall_billing(date_from: str = None, date_to: str = None, freque
         billing = db.get_overall_billing_by_company(date_from, date_to, frequency, page_number, page_size)
         return billing
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
+        print(f"Failed to fetch billing: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing")
 
 @router.get("/billing/company/{company_id}", response_model=OverallBillingResponse)
 async def get_overall_billing(company_id: str, date_from: str = None, date_to: str = None, frequency: str = "daily", page_number: int = 1, page_size: int = 10, db: DBInterface = Depends(get_db)):
@@ -131,7 +142,8 @@ async def get_overall_billing(company_id: str, date_from: str = None, date_to: s
         billing = db.get_billing_by_company_id(date_from, date_to, frequency, company_id, page_number, page_size)
         return OverallBillingResponse(**billing)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")    
+        print(f"Failed to fetch billing: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing")
 
 @router.get("/billing/user/{user_id}", response_model=List[MonthlyBilling])
 async def get_billing_by_user(user_id: str, db: DBInterface = Depends(get_db)):
@@ -140,4 +152,5 @@ async def get_billing_by_user(user_id: str, db: DBInterface = Depends(get_db)):
         billing = db.get_billing_by_user(user_id)
         return billing
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch billing: {e}")
+        print(f"Failed to fetch billing: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch billing")

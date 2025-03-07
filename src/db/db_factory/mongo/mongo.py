@@ -499,7 +499,8 @@ class MongoDB(DBInterface):
             print(f"Conversation {conversation_id} deleted.")
             return {"message": "Chats deleted successfully"}
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Failed to delete conversation: {e}")
+            print(f"Failed to delete conversation: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to delete conversation")
     
     def get_chat_context(self, conversation_id: str) -> List[Dict[str, Any]]:
         """Get the recent 6 chats for a given conversation id"""

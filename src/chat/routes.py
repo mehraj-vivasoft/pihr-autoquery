@@ -17,7 +17,7 @@ async def get_llm() -> LLMInterface:
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
 
-    if not api_key:
+    if not api_key:        
         raise HTTPException(status_code=500, detail="Missing OpenAI API key")
 
     llm_instance = OpenAiLLM(api_key=api_key)
@@ -45,9 +45,10 @@ async def get_db() -> DBInterface:
         yield db_instance
         
     except Exception as e:
+        print(f"Database connection error: {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail=f"Database connection error: {str(e)}"
+            detail=f"Something went wrong"
         )
     finally:
         if db_instance:
